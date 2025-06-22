@@ -1,0 +1,15 @@
+V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\bin\Debug\net9.0-windows10.0.19041.0\AuthenticationMAUI.deps.json
+V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\bin\Debug\net9.0-windows10.0.19041.0\AuthenticationMAUI.dll
+V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\bin\Debug\net9.0-windows10.0.19041.0\AuthenticationMAUI.pdb
+V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\bin\Debug\net9.0-windows10.0.19041.0\Microsoft.Web.WebView2.Core.dll
+V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\bin\Debug\net9.0-windows10.0.19041.0\Microsoft.Web.WebView2.Core.Projection.dll
+V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-windows10.0.19041.0\AuthenticationMAUI.csproj.AssemblyReference.cache
+V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-windows10.0.19041.0\AuthenticationMAUI.GeneratedMSBuildEditorConfig.editorconfig
+V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-windows10.0.19041.0\AuthenticationMAUI.AssemblyInfoInputs.cache
+V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-windows10.0.19041.0\AuthenticationMAUI.AssemblyInfo.cs
+V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-windows10.0.19041.0\AuthenticationMAUI.csproj.CoreCompileInputs.cache
+V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-windows10.0.19041.0\Authenti.AFAA52B2.Up2Date
+V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-windows10.0.19041.0\AuthenticationMAUI.dll
+V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-windows10.0.19041.0\refint\AuthenticationMAUI.dll
+V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-windows10.0.19041.0\AuthenticationMAUI.pdb
+V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-windows10.0.19041.0\ref\AuthenticationMAUI.dll

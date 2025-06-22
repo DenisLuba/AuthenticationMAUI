@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Redirecting...</title>
+</head>
+<body>
+    <script>
+        const token = new URLSearchParams(location.hash.substring(1)).get('id_token');
+        const scheme = new URLSearchParams(location.search).get('scheme') || 'myapp';
+
+        if (token) {
+            window.location.href = scheme + '://auth?id_token=' + token;
+        } else {
+            document.body.innerHTML = '<h2>ID Token not found</h2>';
+        }
+    </script>
+</body>
+</html>

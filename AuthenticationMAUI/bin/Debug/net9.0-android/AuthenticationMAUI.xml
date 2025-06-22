@@ -1,0 +1,292 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AuthenticationMAUI</name>
+    </assembly>
+    <members>
+        <member name="M:AuthenticationMaui.Services.ILoginService.LoginWithEmailAsync(System.String,System.String)">
+            <summary>
+            Вход с помощью логина (или электронной) почты и пароля.
+            </summary>
+            <param name="loginOrEmail">Логин или адрес электронной почты.</param>
+            <param name="password">Пароль аккаунта (не от почты).</param>
+            <returns>В случае успеха возвращается true, иначе - false.</returns>
+        </member>
+        <member name="M:AuthenticationMaui.Services.ILoginService.LoginWithGoogleAsync">
+            <summary>
+            Вход с помощью Google аккаунта.
+            </summary>
+            <returns>В случае успеха возвращается true, иначе - false.</returns>
+        </member>
+        <member name="M:AuthenticationMaui.Services.ILoginService.RegisterWithEmailAsync(System.String,System.String,System.String)">
+            <summary>
+            Регистрация с помощью электронной почты и пароля.
+            </summary>
+            <param name="login">Логин пользователя.</param>
+            <param name="email">Адрес электронной почты.</param>
+            <param name="password">Пароль аккаунта (не от почты).</param>
+            <returns>true случае успеха; иначе - false</returns>
+        </member>
+        <member name="M:AuthenticationMaui.Services.ILoginService.SendPasswordResetEmailAsync(System.String)">
+            <summary>
+            Восстановление пароля по логину или электронной почте.
+            </summary>
+            <param name="loginOrEmail">Логин или адрес электронной почты.</param>
+            <returns>true в случае успеха; иначе - false.</returns>
+        </member>
+        <member name="M:AuthenticationMaui.Services.ILoginService.Logout">
+            <summary>
+            Выход из аккаунта.
+            </summary>
+        </member>
+        <member name="M:AuthenticationMaui.Services.IUserStorageService.AddUserAsync(System.String,System.String)">
+            <summary>
+            Сохраняет логин и привязанный к нему email пользователя в хранилище.
+            </summary>
+            <param name="login">Логин пользователя.</param>
+            <param name="email">Электронная почта пользователя.</param>
+        </member>
+        <member name="M:AuthenticationMaui.Services.IUserStorageService.GetEmailByLoginAsync(System.String)">
+            <summary>
+            Получает email пользователя по его логину из хранилища.
+            </summary>
+            <param name="login">Логин пользователя.</param>
+            <returns>Электронная почта пользователя.</returns>
+        </member>
+        <member name="M:AuthenticationMaui.Services.IUserStorageService.LoginExistsAsync(System.String)">
+            <summary>
+            Проверяет, существует ли пользователь с данным логином в хранилище.
+            </summary>
+            <param name="login">Логин пользователя.</param>
+            <returns>true, если пользователь с данным логином сохранен в хранилище; иначе - false.</returns>
+        </member>
+        <member name="M:AuthenticationMaui.Services.IUserStorageService.RemoveUserAsync(System.String)">
+            <summary>
+            Удаляет пользователя из хранилища по логину.
+            </summary>
+            <param name="login">Логин пользователя.</param>
+        </member>
+        <member name="M:AuthenticationMaui.Services.IUserStorageService.ClearAllUsers">
+            <summary>
+            Удаляет все записи пользователей 
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:AuthenticationMaui.Services.FirebaseLoginService.#ctor(AuthenticationMaui.Services.FirebaseLoginService.FirebaseLoginData)" -->
+        <member name="M:AuthenticationMaui.Services.FirebaseLoginService.LoginWithEmailAsync(System.String,System.String)">
+            <summary>
+            Вход с помощью логина (или электронной почты) и пароля.
+            </summary>
+            <param name="loginOrEmail">Логин или адрес электронной почты.</param>
+            <param name="password">Пароль аккаунта (не от почты).</param>
+            <returns>В случае успеха возвращается true, инача - false.</returns>
+            <exception cref="T:Firebase.Auth.FirebaseAuthException">Обработка ошибок аутентификации. Например, неверный пароль или адрес электронной почты.</exception>
+            <exception cref="T:System.Exception">Обработка других ошибок. Например, в хранилище типа IUserStorageService не найден логин.</exception>
+        </member>
+        <member name="M:AuthenticationMaui.Services.FirebaseLoginService.LoginWithGoogleAsync">
+            <summary>
+            Вход с помощью Google аккаунта.
+            </summary>
+            <returns>В случае успеха возвращается true, иначе - false.</returns>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:AuthenticationMaui.Services.FirebaseLoginService.Logout">
+            <summary>
+            Выход из аккаунта.
+            </summary>
+        </member>
+        <member name="M:AuthenticationMaui.Services.FirebaseLoginService.RegisterWithEmailAsync(System.String,System.String,System.String)">
+            <summary>
+            Регистрация с помощью электронной почты и пароля.
+            </summary>
+            <param name="login">Логин пользователя.</param>
+            <param name="email">Адрес электронной почты.</param>
+            <param name="password">Пароль аккаунта (не от почты).</param>
+            <returns>true случае успеха; иначе - false</returns>
+            <exception cref="T:Firebase.Auth.FirebaseAuthException">Обработка ошибок аутентификации. Например, неверный пароль или адрес электронной почты.</exception>
+            <exception cref="T:System.Exception">Обработка других ошибок.Например, невалидная почта или невалидный пароль.</exception>
+        </member>
+        <member name="M:AuthenticationMaui.Services.FirebaseLoginService.SendPasswordResetEmailAsync(System.String)">
+            <summary>
+            Восстановление пароля по логину или электронной почте.
+            </summary>
+            <param name="loginOrEmail">Логин или адрес электронной почты.</param>
+            <returns>true в случае успеха; иначе - false.</returns>
+            <exception cref="T:System.Exception">Ошибка сброса пароля. Например, неверный email или логин.</exception>
+        </member>
+        <member name="M:AuthenticationMaui.Services.FirebaseLoginService.IsValidEmail(System.String)">
+            <summary>
+            Определяет, имеет ли указанный адрес электронной почты правильный формат.
+            </summary>
+            <param name="email">Адрес электронной почты для проверки.</param>
+            <returns>true, если адрес электронной почты указан в правильном формате; иначе - false. </returns>
+        </member>
+        <member name="M:AuthenticationMaui.Services.FirebaseLoginService.IsValidPassword(System.String)">
+            <summary>
+            Проверяет, соответствует ли строка пароля требованиям:
+            - минимум 6 символов;
+            - допускаются латинские буквы, цифры, спецсимволы и пробелы.
+            </summary>
+            <param name="password">Пароль для проверки.</param>
+            <returns>true, если пароль соответствует требованиям; иначе - false.</returns>
+        </member>
+        <member name="M:AuthenticationMaui.Services.UserSecureStorageService.AddUserAsync(System.String,System.String)">
+            <summary>
+            Сохраняет логин и привязанный к нему email пользователя в SecureStorage.
+            </summary>
+            <param name="login">Логин пользователя.</param>
+            <param name="email">Электронная почта пользователя.</param>
+            <exception cref="T:System.ArgumentException">Логин или электронная почта равна null или пустой строке.</exception>
+        </member>
+        <member name="M:AuthenticationMaui.Services.UserSecureStorageService.ClearAllUsers">
+            <summary>
+            Удаляет все записи пользователей (осторожно!)
+            </summary>
+        </member>
+        <member name="M:AuthenticationMaui.Services.UserSecureStorageService.GetEmailByLoginAsync(System.String)">
+            <summary>
+            Получает email пользователя по его логину из SecureStorage.
+            </summary>
+            <param name="login">Логин пользователя.</param>
+            <returns>Электронная почта пользователя.</returns>
+        </member>
+        <member name="M:AuthenticationMaui.Services.UserSecureStorageService.LoginExistsAsync(System.String)">
+            <summary>
+            Проверяет, существует ли пользователь с данным логином в SecureStorage.
+            </summary>
+            <param name="login">Логин пользователя.</param>
+            <returns>true, если пользователь с данным логином сохранен в SecureStorage; иначе - false.</returns>
+        </member>
+        <member name="M:AuthenticationMaui.Services.UserSecureStorageService.RemoveUserAsync(System.String)">
+            <summary>
+            Удаляет пользователя из SecureStorage по логину.
+            </summary>
+            <param name="login">Логин пользователя.</param>
+        </member>
+        <member name="T:AuthenticationMAUI.Resource">
+            <summary>
+            Android Resource Designer class.
+            Exposes the Android Resource designer assembly into the project Namespace.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_Button.TextColorTo(Microsoft.Maui.Controls.Button,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_DatePicker.TextColorTo(Microsoft.Maui.Controls.DatePicker,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_Editor.TextColorTo(Microsoft.Maui.Controls.Editor,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_Entry.TextColorTo(Microsoft.Maui.Controls.Entry,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_InputView.TextColorTo(Microsoft.Maui.Controls.InputView,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_Label.TextColorTo(Microsoft.Maui.Controls.Label,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_Picker.TextColorTo(Microsoft.Maui.Controls.Picker,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_RadioButton.TextColorTo(Microsoft.Maui.Controls.RadioButton,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_SearchBar.TextColorTo(Microsoft.Maui.Controls.SearchBar,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_TimePicker.TextColorTo(Microsoft.Maui.Controls.TimePicker,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+    </members>
+</doc>
