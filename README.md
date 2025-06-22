@@ -1,3 +1,171 @@
+# En
+# Firebase Google Auth for .NET MAUI
+
+## ✅ Overview
+
+This template includes:
+
+* Firebase Hosting (`redirect.html`)
+* `AuthenticationMAUI` library for Google Login in .NET MAUI apps. It also implements Email authentication in Firebase
+
+---
+
+## Step-by-step Setup
+
+### 1. Create a Firebase Project
+
+1. Go to [https://console.firebase.google.com](https://console.firebase.google.com)
+2. Create a project (e.g., `myapp-auth`)
+3. Enable `Authentication > Sign-in method > Google`
+4. Note the values:
+
+   * Web API Key (**Project Settings > General > Web API Key**)
+   * Auth domain (**Authentication > Settings > Authorized Domains**) — usually `project-id.firebaseapp.com`
+
+### 2. Create OAuth 2.0 Client ID
+
+1. Open [Google Cloud Console > API & Services > Credentials](https://console.cloud.google.com/apis/credentials)
+2. Create a new `OAuth 2.0 Client ID`:
+
+   * Type: Web Application
+   * Authorized redirect URIs: `https://project-id.firebaseapp.com/redirect.html`
+3. Copy your `client_id` (in the same place or in Firebase Console > Authentication > Sign-in method > Google > Web SDK configuration > Web client ID)
+
+### 3. Setup Firebase Hosting
+
+1. Install Firebase CLI:
+
+```bash
+npm install -g firebase-tools
+```
+
+2. Log in:
+
+```bash
+firebase login
+```
+
+3. Initialize hosting (use your project ID):
+
+```bash
+firebase init hosting
+```
+
+4. Set `public` as your public directory
+
+### 4. Create `redirect.html`
+
+In `public/redirect.html`:
+
+```html
+<script>
+  const token = new URLSearchParams(location.hash.substring(1)).get('id_token');
+  const scheme = new URLSearchParams(location.search).get('scheme') || 'myapp';
+  if (token) {
+    window.location.href = scheme + '://auth?id_token=' + token;
+  } else {
+    document.body.innerHTML = '<h2>ID Token not found</h2>';
+  }
+</script>
+```
+
+### 5. Configure `firebase.json`
+
+```json
+{
+  "hosting": {
+    "public": "public",
+    "rewrites": [
+      { "source": "/redirect.html", "destination": "/redirect.html" }
+    ],
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}
+```
+
+### 6. Deploy
+
+```bash
+firebase deploy --only hosting
+```
+
+---
+
+## 🌐 Using `FirebaseLoginService`
+
+1. Register `FirebaseLoginData` with DI:
+
+```csharp
+builder.Services.AddSingleton<IUserStorageService, UserSecureStorageService>();
+builder.Services.AddSingleton<ILoginService>(provider =>
+{
+    var userStorageService = provider.GetRequiredService<IUserStorageService>();
+    return new FirebaseLoginService(
+        new ()
+        {
+            UserStorageService = userStorageService,
+            ApiKey = apiKey, // Your Web API Key from Firebase Console (Firebase Console > Project Settings > General > "Web API Key")
+            AuthDomain = authDomain, // Usualy it is your-project-id.firebaseapp.com (Firebase Console > Authentication > Settings > "Authorized domains")
+            GoogleClientId = googleClientId, // Your Google Client ID (Firebase Console > Authentication > Sign-in method > Google > Web SDK configuration > "Web client ID")
+            GoogleRedirectUri = googleRedirectUri, // Usualy it is "https://your-project-id.firebaseapp.com/__/auth/handler", but we are changing "__/auth/handler" to "redirect.html",
+                                                   // so that it turns out "https://your-project-id.firebaseapp.com/redirect.html"
+                                                   // (Google Cloud Console > APIs & Services > Credentials > Auth 2.0 Client IDs > Web client (auto created by Google Service) > Authorized redirect URIs)
+            CallbackScheme = callbackScheme // A callback scheme for Google authentication. For example, "myapp" for myapp:// (but you can also use myapp:// - this will be edited in the constructor)
+        });
+});
+```
+
+2. Add the intent filter for Android `MainActivity.cs`, for example, below the MainActivity class in the same file:
+
+```csharp
+[Activity(NoHistory = true, LaunchMode = LaunchMode.SingleTop, Exported = true)]
+[IntentFilter(
+    [Android.Content.Intent.ActionView],
+    Categories = [Android.Content.Intent.CategoryDefault, Android.Content.Intent.CategoryBrowsable],
+    DataScheme = CALLBACK_SCHEME)]
+public class WebAuthenticationCallbackActivity : Microsoft.Maui.Authentication.WebAuthenticatorCallbackActivity
+{
+    private const string CALLBACK_SCHEME = "todolist"; // Must match the Callback Scheme (passed to FirebaseLoginService)
+}
+```
+
+3. Add to `Info.plist` (iOS):
+
+```xml
+<key>CFBundleURLTypes</key>
+<array>
+  <dict>
+    <key>CFBundleURLSchemes</key>
+    <array>
+      <string>myapp</string>
+    </array>
+  </dict>
+</array>
+```
+
+---
+
+## ✅ Test
+
+1. Open:
+
+```bash
+https://project-id.firebaseapp.com/redirect.html?scheme=myapp
+```
+
+2. Google redirects to `myapp://auth?id_token=...`
+3. Your MAUI app captures `id_token` and logs in successfully
+
+---
+
+This template is reusable for any number of MAUI projects with Firebase Hosting 🔁
+
+
+# Ru
 # Firebase Google Auth for .NET MAUI
 
 ## ✅ Обзор
