@@ -4,7 +4,7 @@
 
 ## ✅ Overview
 
-This template includes:
+This template uses FirebaseAuthentication.net and WebAuthenticator. It provides:
 
 * Firebase Hosting (`redirect.html`)
 * `AuthenticationMAUI` library for Google Login in .NET MAUI apps. It also implements Email authentication in Firebase
@@ -34,7 +34,7 @@ This template includes:
 
 ### 3. Setup Firebase Hosting
 
-1. If not installed, install `firebase-tools' via the terminal, located in the root directory of the project [View → Terminal] (first download and install Node.js: https://nodejs.org/en/download/current):
+1. If not installed, install `firebase-tools' via the terminal [View → Terminal], located in the root directory of the project (first download and install Node.js: https://nodejs.org/en/download/current):
 
 ```bash
 npm install -g firebase-tools
@@ -52,9 +52,18 @@ firebase login
 firebase init hosting
 ```
 
-4. Set `public` as your public directory
+4. Answer questions from firebase:
+5. ```bash
+1. Are you ready to proceed? Y
+2. Please select an option:
+- Add Firebase to an existring Google Cloud Platform project
+3. Select the Google Cloud Platform project you would like to add Firebase: your project
+4. What do you want to use your public directory? public
+5. Configure as a single-page app(rewrite allurls to /index.html)? N
+6. Set up authomatic builds and deploys with GitHub? N
+```
 
-### 4. Create `redirect.html`
+### 4. Create a file `redirect.html`
 
 In `public/redirect.html`:
 
@@ -70,7 +79,7 @@ In `public/redirect.html`:
 </script>
 ```
 
-### 5. Configure `firebase.json`
+### 5. Edit the file `firebase.json`
 
 ```json
 {
@@ -143,7 +152,7 @@ builder.Services.AddSingleton<ILoginService>(provider =>
     DataScheme = CALLBACK_SCHEME)]
 public class WebAuthenticationCallbackActivity : Microsoft.Maui.Authentication.WebAuthenticatorCallbackActivity
 {
-    private const string CALLBACK_SCHEME = "todolist"; // Must match the Callback Scheme (passed to FirebaseLoginService)
+    private const string CALLBACK_SCHEME = "myapp"; // Must match the Callback Scheme (passed to FirebaseLoginService)
 }
 ```
 
@@ -163,19 +172,6 @@ public class WebAuthenticationCallbackActivity : Microsoft.Maui.Authentication.W
 
 ---
 
-## ✅ Test
-
-1. Open:
-
-```bash
-https://project-id.firebaseapp.com/redirect.html?scheme=myapp
-```
-
-2. Google redirects to `myapp://auth?id_token=...`
-3. Your MAUI app captures `id_token` and logs in successfully
-
----
-
 This template is reusable for any number of MAUI projects with Firebase Hosting 🔁
 
 # Ru
@@ -184,7 +180,7 @@ This template is reusable for any number of MAUI projects with Firebase Hosting 
 
 ## ✅ Обзор
 
-Этот шаблон обеспечивает:
+Этот шаблон использует FirebaseAuthentication.net и WebAuthenticator. Он обеспечивает:
 
 * Firebase Hosting (`redirect.html`)
 * и библиотеку `AuthenticationMAUI`, которая подключает Google Login в MAUI-приложении. Также в ней реализована аутентификация через Email в Firebase
@@ -214,7 +210,7 @@ This template is reusable for any number of MAUI projects with Firebase Hosting 
 
 ### 3. Настрой firebase hosting
 
-1. Установи, если не установлен, `firebase-tools` через терминал, находясь в корневой директории проекта View → Terminal (вначале скачай и установи Node.js: [https://nodejs.org/en/download/current]):
+1. Установи, если не установлен, `firebase-tools` через терминал [View → Terminal], находясь в корневой директории проекта (вначале скачай и установи Node.js: https://nodejs.org/en/download/current):
 
 ```bash
 npm install -g firebase-tools
@@ -232,9 +228,18 @@ firebase login
 firebase init hosting
 ```
 
-4. Укажи `public` как папку
+4. Ответь на вопросы от firebase:
+```bash
+1. Are you ready to proceed? Y
+2. Please select an option:
+- Add Firebase to an existring Google Cloud Platform project
+3. Select the Google Cloud Platform project you would like to add Firebase: ваш проект
+4. What do you want to use your public directory? public
+5. Configure as a single-page app(rewrite allurls to /index.html)? N
+6. Set up authomatic builds and deploys with GitHub? N
+```
 
-### 4. Файл redirect.html
+### 4. Создай файл redirect.html
 
 `public/redirect.html`:
 
@@ -250,7 +255,7 @@ firebase init hosting
 </script>
 ```
 
-### 5. Файл firebase.json
+### 5. Измени файл firebase.json
 
 ```json
 {
@@ -323,7 +328,7 @@ builder.Services.AddSingleton<ILoginService>(provider =>
     DataScheme = CALLBACK_SCHEME)]
 public class WebAuthenticationCallbackActivity : Microsoft.Maui.Authentication.WebAuthenticatorCallbackActivity
 {
-    private const string CALLBACK_SCHEME = "todolist"; // Должно совпадать со схемой обратного вызова CallbackScheme (переданной в FirebaseLoginService)
+    private const string CALLBACK_SCHEME = "myapp"; // Должно совпадать со схемой обратного вызова CallbackScheme (переданной в FirebaseLoginService)
 }
 ```
 
@@ -340,19 +345,6 @@ public class WebAuthenticationCallbackActivity : Microsoft.Maui.Authentication.W
   </dict>
 </array>
 ```
-
----
-
-## 📌 Тестовый запуск
-
-* Проверь:
-
-```bash
-https://project-id.firebaseapp.com/redirect.html?scheme=myapp
-```
-
-* Google перенаправит на `myapp://auth?id_token=...`
-* MAUI приложение получит `id_token` и войдёт
 
 ---
 
