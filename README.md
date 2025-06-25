@@ -174,6 +174,183 @@ public class WebAuthenticationCallbackActivity : Microsoft.Maui.Authentication.W
 
 This template is reusable for any number of MAUI projects with Firebase Hosting 🔁
 
+# Fr (Traduit par ai)
+
+# Authentification Google Firebase pour .NET MAUI
+
+## ✅ Aperçu
+
+Ce modèle utilise FirebaseAuthentication.net et WebAuthenticator. Il fournit :
+
+* Firebase Hosting (`redirect.html`)
+* La bibliothèque `AuthenticationMAUI` pour la connexion Google dans les applications .NET MAUI. Elle implémente également l’authentification par e-mail via Firebase.
+
+---
+
+## Configuration étape par étape
+
+### 1. Créer un projet Firebase
+
+1. Accédez à [https://console.firebase.google.com](https://console.firebase.google.com)
+2. Créez un projet (par exemple, `myapp-auth`)
+3. Activez `Authentication > Sign-in method > Google`
+4. Notez les valeurs suivantes :
+
+   * Clé API Web (**Paramètres du projet > Général > Clé API Web**)
+   * Domaine d’authentification (**Authentication > Paramètres > Domaines autorisés**) — généralement `project-id.firebaseapp.com`
+
+### 2. Créer un identifiant client OAuth 2.0
+
+1. Ouvrez [Google Cloud Console > API & Services > Identifiants](https://console.cloud.google.com/apis/credentials)
+2. Si vous n’en avez pas encore créé, créez un `identifiant client OAuth 2.0` :
+
+   * Type : Application Web
+   * URI de redirection autorisé : `https://project-id.firebaseapp.com/redirect.html`
+3. Copiez votre `client_id` (au même endroit ou dans Firebase Console > Authentication > Sign-in method > Google > Web SDK configuration > Web client ID)
+
+### 3. Configurer Firebase Hosting
+
+1. Si ce n’est pas déjà fait, installez `firebase-tools` via le terminal [Affichage → Terminal], à la racine du projet (commencez par installer Node.js : https://nodejs.org/en/download/current) :
+
+```bash
+npm install -g firebase-tools
+```
+
+2. Connectez-vous :
+
+```bash
+firebase login
+```
+
+3. Initialisez l’hébergement (utilisez l’ID de votre projet) :
+
+```bash
+firebase init hosting
+```
+
+4. Répondez aux questions de firebase :
+```bash
+1. Êtes-vous prêt à continuer ? Y
+2. Veuillez sélectionner une option :
+- Ajouter Firebase à un projet Google Cloud Platform existant
+3. Sélectionnez le projet GCP auquel vous souhaitez ajouter Firebase : votre projet
+4. Quel répertoire public souhaitez-vous utiliser ? public
+5. Configurer comme une application monopage (réécrire toutes les URL vers /index.html) ? N
+6. Configurer des builds et déploiements automatiques avec GitHub ? N
+```
+
+### 4. Créer un fichier `redirect.html`
+
+Dans `public/redirect.html` :
+
+```html
+<script>
+  const token = new URLSearchParams(location.hash.substring(1)).get('id_token');
+  const scheme = new URLSearchParams(location.search).get('scheme') || 'myapp';
+  if (token) {
+    window.location.href = scheme + '://auth?id_token=' + token;
+  } else {
+    document.body.innerHTML = '<h2>ID Token not found</h2>';
+  }
+</script>
+```
+
+### 5. Modifier le fichier `firebase.json`
+
+```json
+{
+  "hosting": {
+    "public": "public",
+    "rewrites": [
+      { "source": "/redirect.html", "destination": "/redirect.html" }
+    ],
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}
+```
+
+### 6. Déployer
+
+```bash
+firebase deploy --only hosting
+```
+
+---
+
+### 🔗 Ajouter à votre projet MAUI
+
+1. Clonez le dépôt :
+
+```bash
+git clone https://github.com/DenisLuba/AuthenticationMAUI.git
+```
+
+2. Dans Visual Studio : Clic droit sur la solution → `Add > Existing Project...` → sélectionnez `AuthenticationMAUI.csproj`
+
+3. Puis : clic droit sur votre projet MAUI → `Add > Project Reference...` → sélectionnez `AuthenticationMAUI`
+
+---
+
+## 🌐 Utiliser `FirebaseLoginService`
+
+1. Enregistrez `FirebaseLoginData` dans le conteneur DI :
+
+```csharp
+builder.Services.AddSingleton<IUserStorageService, UserSecureStorageService>();
+builder.Services.AddSingleton<ILoginService>(provider =>
+{
+    var userStorageService = provider.GetRequiredService<IUserStorageService>();
+    return new FirebaseLoginService(
+        new ()
+        {
+            UserStorageService = userStorageService,
+            ApiKey = apiKey, // Votre clé API Web depuis la console Firebase (Firebase Console > Paramètres du projet > Général > "Web API Key")
+            AuthDomain = authDomain, // Généralement votre-project-id.firebaseapp.com (Firebase Console > Authentication > Paramètres > "Domaines autorisés")
+            GoogleClientId = googleClientId, // Votre identifiant client Google (Firebase Console > Authentication > Méthode de connexion > Google > Configuration Web SDK > "Web client ID")
+            GoogleRedirectUri = googleRedirectUri, // Généralement "https://your-project-id.firebaseapp.com/__/auth/handler", mais ici on le change en "redirect.html"
+                                                   // Cela devient donc "https://your-project-id.firebaseapp.com/redirect.html"
+                                                   // (Google Cloud Console > APIs & Services > Credentials > OAuth 2.0 Client IDs > Client Web > URIs de redirection autorisés)
+            CallbackScheme = callbackScheme // Le schéma de rappel utilisé pour l’authentification Google. Par exemple, "myapp" pour myapp://
+        });
+});
+```
+
+2. Ajouter un intent filter dans `MainActivity.cs` sous Android, par exemple juste après la classe MainActivity :
+
+```csharp
+[Activity(NoHistory = true, LaunchMode = LaunchMode.SingleTop, Exported = true)]
+[IntentFilter(
+    [Android.Content.Intent.ActionView],
+    Categories = [Android.Content.Intent.CategoryDefault, Android.Content.Intent.CategoryBrowsable],
+    DataScheme = CALLBACK_SCHEME)]
+public class WebAuthenticationCallbackActivity : Microsoft.Maui.Authentication.WebAuthenticatorCallbackActivity
+{
+    private const string CALLBACK_SCHEME = "myapp"; // Doit correspondre au Callback Scheme passé à FirebaseLoginService
+}
+```
+
+3. Ajouter au fichier `Info.plist` (iOS) :
+
+```xml
+<key>CFBundleURLTypes</key>
+<array>
+  <dict>
+    <key>CFBundleURLSchemes</key>
+    <array>
+      <string>myapp</string>
+    </array>
+  </dict>
+</array>
+```
+
+---
+
+Ce modèle peut être réutilisé pour un nombre illimité de projets MAUI avec Firebase Hosting 🔁
+
 # Ru
 
 # Firebase Google Auth for .NET MAUI
@@ -350,7 +527,7 @@ public class WebAuthenticationCallbackActivity : Microsoft.Maui.Authentication.W
 
 Успешно! Теперь этот шаблон можно переиспользовать в сотне проектов MAUI с Firebase Hosting!
 
-# Zh
+# Zh (AI翻译)
 # 用于 .NET MAUI 的 Firebase Google 身份验证
 ## ✅ 概览
 该模板使用 FirebaseAuthentication.net 和 WebAuthenticator，提供以下功能：
@@ -523,3 +700,5 @@ public class WebAuthenticationCallbackActivity : Microsoft.Maui.Authentication.W
 ---
 
 该模板可在任意数量的使用 Firebase Hosting 的 MAUI 项目中复用 🔁
+
+
