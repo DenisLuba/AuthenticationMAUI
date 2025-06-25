@@ -34,7 +34,7 @@ This template includes:
 
 ### 3. Setup Firebase Hosting
 
-1. Install Firebase CLI:
+1. If not installed, install `firebase-tools' via the terminal, located in the root directory of the project [View → Terminal] (first download and install Node.js: https://nodejs.org/en/download/current):
 
 ```bash
 npm install -g firebase-tools
@@ -214,7 +214,7 @@ This template is reusable for any number of MAUI projects with Firebase Hosting 
 
 ### 3. Настрой firebase hosting
 
-1. Установи `firebase-tools` ([https://nodejs.org/en/download/current](https://nodejs.org/en/download/current)):
+1. Установи, если не установлен, `firebase-tools` через терминал, находясь в корневой директории проекта View → Terminal (вначале скачай и установи Node.js: [https://nodejs.org/en/download/current]):
 
 ```bash
 npm install -g firebase-tools
