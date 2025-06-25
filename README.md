@@ -101,7 +101,7 @@ firebase deploy --only hosting
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/your-org/AuthenticationMAUI.git
+git clone https://github.com/DenisLuba/AuthenticationMAUI.git
 ```
 
 2. In Visual Studio: Right click on solution → `Add > Existing Project...` → select `AuthenticationMAUI.csproj`
@@ -281,7 +281,7 @@ firebase deploy --only hosting
 1. Клонируй репозиторий:
 
 ```bash
-git clone https://github.com/your-org/AuthenticationMAUI.git
+git clone https://github.com/DenisLuba/AuthenticationMAUI.git
 ```
 
 2. В Visual Studio: ПКМ на решении → `Add > Existing Project...` → выбери `AuthenticationMAUI.csproj`
