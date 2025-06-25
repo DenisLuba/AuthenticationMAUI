@@ -1,4 +1,5 @@
 # En
+
 # Firebase Google Auth for .NET MAUI
 
 ## ✅ Overview
@@ -25,7 +26,7 @@ This template includes:
 ### 2. Create OAuth 2.0 Client ID
 
 1. Open [Google Cloud Console > API & Services > Credentials](https://console.cloud.google.com/apis/credentials)
-2. Create a new `OAuth 2.0 Client ID`:
+2. If you haven't created one yet, create an `OAuth 2.0 Client ID`:
 
    * Type: Web Application
    * Authorized redirect URIs: `https://project-id.firebaseapp.com/redirect.html`
@@ -92,6 +93,19 @@ In `public/redirect.html`:
 ```bash
 firebase deploy --only hosting
 ```
+
+---
+
+### 🔗 Add to your MAUI project
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/your-org/AuthenticationMAUI.git
+```
+
+2. In Visual Studio: Right click on solution → `Add > Existing Project...` → select `AuthenticationMAUI.csproj`
+3. Then: Right click on your MAUI project → `Add > Project Reference...` → select `AuthenticationMAUI`
 
 ---
 
@@ -164,8 +178,8 @@ https://project-id.firebaseapp.com/redirect.html?scheme=myapp
 
 This template is reusable for any number of MAUI projects with Firebase Hosting 🔁
 
-
 # Ru
+
 # Firebase Google Auth for .NET MAUI
 
 ## ✅ Обзор
@@ -192,7 +206,7 @@ This template is reusable for any number of MAUI projects with Firebase Hosting 
 ### 2. Создание OAuth 2.0 Client ID
 
 1. Открой [Google Cloud Console > API & Services > Credentials](https://console.cloud.google.com/apis/credentials)
-2. Создай `OAuth 2.0 Client ID`:
+2. Создай, если еще не создан, `OAuth 2.0 Client ID`:
 
    * Type: Web Application
    * Authorized redirect URIs: `https://project-id.firebaseapp.com/redirect.html`
@@ -200,7 +214,7 @@ This template is reusable for any number of MAUI projects with Firebase Hosting 
 
 ### 3. Настрой firebase hosting
 
-1. Установи `firebase-tools` (https://nodejs.org/en/download/current):
+1. Установи `firebase-tools` ([https://nodejs.org/en/download/current](https://nodejs.org/en/download/current)):
 
 ```bash
 npm install -g firebase-tools
@@ -259,6 +273,19 @@ firebase init hosting
 ```bash
 firebase deploy --only hosting
 ```
+
+---
+
+### 🔗 Добавление в существующий MAUI проект
+
+1. Клонируй репозиторий:
+
+```bash
+git clone https://github.com/your-org/AuthenticationMAUI.git
+```
+
+2. В Visual Studio: ПКМ на решении → `Add > Existing Project...` → выбери `AuthenticationMAUI.csproj`
+3. Затем: ПКМ на проекте MAUI → `Add > Project Reference...` → отметь `AuthenticationMAUI`
 
 ---
 
@@ -330,3 +357,4 @@ https://project-id.firebaseapp.com/redirect.html?scheme=myapp
 ---
 
 Успешно! Теперь этот шаблон можно переиспользовать в сотне проектов MAUI с Firebase Hosting!
+
