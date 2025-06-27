@@ -16,6 +16,7 @@ V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-maccatal
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-maccatalyst\AuthenticationMAUI.AssemblyInfoInputs.cache
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-maccatalyst\AuthenticationMAUI.AssemblyInfo.cs
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-maccatalyst\AuthenticationMAUI.csproj.CoreCompileInputs.cache
+V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-maccatalyst\AuthenticationMAUI.sourcelink.json
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-maccatalyst\AuthenticationMAUI.dll
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-maccatalyst\refint\AuthenticationMAUI.dll
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-maccatalyst\AuthenticationMAUI.pdb

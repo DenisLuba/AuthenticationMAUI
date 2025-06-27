@@ -180,3 +180,13 @@ Xamarin.KotlinX.Coroutines.Core.aar
 Xamarin.KotlinX.Coroutines.Core.Jvm.aar
 Xamarin.KotlinX.Serialization.Core.aar
 Xamarin.KotlinX.Serialization.Core.Jvm.aar
+Xamarin.AndroidX.Core.ViewTree.dll
+Xamarin.GooglePlayServices.Basement.dll
+Xamarin.GooglePlayServices.Tasks.dll
+Xamarin.JSpecify.dll
+play-services-basement.aar
+play-services-tasks.aar
+Xamarin.JSpecify.aar
+androidx.core.core-viewtree.aar
+playservicesbasement-18.7.0.aar
+playservicestasks-18.3.0.aar

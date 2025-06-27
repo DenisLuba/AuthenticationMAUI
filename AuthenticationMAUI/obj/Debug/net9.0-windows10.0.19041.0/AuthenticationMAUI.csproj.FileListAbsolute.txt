@@ -8,6 +8,7 @@ V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-windows1
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-windows10.0.19041.0\AuthenticationMAUI.AssemblyInfoInputs.cache
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-windows10.0.19041.0\AuthenticationMAUI.AssemblyInfo.cs
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-windows10.0.19041.0\AuthenticationMAUI.csproj.CoreCompileInputs.cache
+V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-windows10.0.19041.0\AuthenticationMAUI.sourcelink.json
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-windows10.0.19041.0\Authenti.AFAA52B2.Up2Date
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-windows10.0.19041.0\AuthenticationMAUI.dll
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-windows10.0.19041.0\refint\AuthenticationMAUI.dll

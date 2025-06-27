@@ -1,16 +1,7 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "V:\\MAUI Projects\\AuthenticationMAUI\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{FBC3048B-5A1D-48FA-BF93-BEEE537DC66C}|AuthenticationMAUI\\AuthenticationMAUI.csproj|v:\\maui projects\\authenticationmaui\\authenticationmaui\\services\\firebaseloginservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FBC3048B-5A1D-48FA-BF93-BEEE537DC66C}|AuthenticationMAUI\\AuthenticationMAUI.csproj|solutionrelative:authenticationmaui\\services\\firebaseloginservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{FBC3048B-5A1D-48FA-BF93-BEEE537DC66C}|AuthenticationMAUI\\AuthenticationMAUI.csproj|v:\\maui projects\\authenticationmaui\\authenticationmaui\\authenticationmaui.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{FBC3048B-5A1D-48FA-BF93-BEEE537DC66C}|AuthenticationMAUI\\AuthenticationMAUI.csproj|solutionrelative:authenticationmaui\\authenticationmaui.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -18,7 +9,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 8,
+          "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -47,32 +38,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "AuthenticationMAUI.csproj",
-              "DocumentMoniker": "V:\\MAUI Projects\\AuthenticationMAUI\\AuthenticationMAUI\\AuthenticationMAUI.csproj",
-              "RelativeDocumentMoniker": "AuthenticationMAUI\\AuthenticationMAUI.csproj",
-              "ToolTip": "V:\\MAUI Projects\\AuthenticationMAUI\\AuthenticationMAUI\\AuthenticationMAUI.csproj",
-              "RelativeToolTip": "AuthenticationMAUI\\AuthenticationMAUI.csproj",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACgAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-06-13T23:22:17.182Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "FirebaseLoginService.cs",
-              "DocumentMoniker": "V:\\MAUI Projects\\AuthenticationMAUI\\AuthenticationMAUI\\Services\\FirebaseLoginService.cs",
-              "RelativeDocumentMoniker": "AuthenticationMAUI\\Services\\FirebaseLoginService.cs",
-              "ToolTip": "V:\\MAUI Projects\\AuthenticationMAUI\\AuthenticationMAUI\\Services\\FirebaseLoginService.cs",
-              "RelativeToolTip": "AuthenticationMAUI\\Services\\FirebaseLoginService.cs",
-              "ViewState": "AgIAAFoAAAAAAAAAAAAywGkAAAA4AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-17T11:07:52.273Z",
-              "EditorCaption": ""
             }
           ]
         }

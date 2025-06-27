@@ -1,6 +1,4 @@
-﻿using Firebase.Auth;
-
-namespace AuthenticationMaui.Services;
+﻿namespace AuthenticationMaui.Services;
 
 public interface ILoginService
 {

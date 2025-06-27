@@ -1,6 +1,5 @@
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\bin\Debug\net9.0-ios\AuthenticationMAUI.dll
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\bin\Debug\net9.0-ios\AuthenticationMAUI.pdb
-V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-ios\build-signature\signature
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-ios\actool\_PartialAppManifest.items
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-ios\actool\_BundleResourceWithLogicalName.items
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-ios\actool\_ProcessedImageAssetsPath.items
@@ -17,6 +16,7 @@ V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-ios\Auth
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-ios\AuthenticationMAUI.AssemblyInfoInputs.cache
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-ios\AuthenticationMAUI.AssemblyInfo.cs
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-ios\AuthenticationMAUI.csproj.CoreCompileInputs.cache
+V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-ios\AuthenticationMAUI.sourcelink.json
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-ios\AuthenticationMAUI.dll
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-ios\refint\AuthenticationMAUI.dll
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-ios\AuthenticationMAUI.pdb
