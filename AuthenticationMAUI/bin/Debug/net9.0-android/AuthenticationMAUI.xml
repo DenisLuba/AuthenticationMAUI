@@ -4,34 +4,67 @@
         <name>AuthenticationMAUI</name>
     </assembly>
     <members>
-        <member name="M:AuthenticationMaui.Services.ILoginService.LoginWithEmailAsync(System.String,System.String)">
+        <member name="M:AuthenticationMaui.Services.ILoginService.LoginWithEmailAsync(System.String,System.String,System.Int64)">
             <summary>
             Вход с помощью логина (или электронной) почты и пароля.
             </summary>
             <param name="loginOrEmail">Логин или адрес электронной почты.</param>
             <param name="password">Пароль аккаунта (не от почты).</param>
+            <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
             <returns>В случае успеха возвращается true, иначе - false.</returns>
         </member>
-        <member name="M:AuthenticationMaui.Services.ILoginService.LoginWithGoogleAsync">
+        <member name="M:AuthenticationMaui.Services.ILoginService.LoginWithGoogleAsync(System.Int64)">
             <summary>
-            Вход с помощью Google аккаунта.
+            Вход с помощью аккаунта Google.
             </summary>
+            <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
             <returns>В случае успеха возвращается true, иначе - false.</returns>
         </member>
-        <member name="M:AuthenticationMaui.Services.ILoginService.RegisterWithEmailAsync(System.String,System.String,System.String)">
+        <member name="M:AuthenticationMaui.Services.ILoginService.LoginWithFacebookAsync(System.Int64)">
+            <summary>
+            Вход с помощью аккаунта Facebook.
+            </summary>
+            <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
+            <returns>В случае успеха возвращается true, иначе - false.</returns>
+        </member>
+        <member name="M:AuthenticationMaui.Services.ILoginService.RequestVerificationCodeAsync(System.String,System.Int64)">
+            <summary>
+            Отправляет запрос на генерацию и доставку проверочного кода на указанный номер телефона.
+            </summary>
+            <remarks>Этот метод связывается с внешней службой аутентификации для отправки проверочного кода. 
+            Убедитесь, что указанный номер телефона действителен и правильно отформатирован.</remarks>
+            <param name="phoneNumber">Номер телефона, на который будет отправлен проверочный код.</param>
+            <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции отправки кода.</param>
+            <returns><see cref="T:AuthenticationMaui.Services.PhoneAuthSessionResult"/> содержащий информацию о сеансе, необходимую для последующих шагов аутентификации.</returns>
+            <exception cref="T:System.Exception">Выбрасывается, если запрос завершился неудачей или ответ не содержит необходимой информации о сессии.</exception>
+        </member>
+        <member name="M:AuthenticationMaui.Services.ILoginService.LoginWithVerificationCodeAsync(System.String,System.String,System.Int64)">
+            <summary>
+            Авторизация с помощью проверочного кода, полученного на номер телефона.
+            </summary>
+            <param name="sessionInfo">Информация, полученная для номера телефона,
+            введенного в параметр метода RequestVerificationCodeAsync.</param>
+            <param name="code">Код, полученный пользователем в СМС.</param>
+            <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
+            <returns>true, если аутентификация прошла успешно, false - в противном случае.</returns>
+            <exception cref="T:System.Exception">Выбрасывается, если запрос завершился неудачей или ответ не содержит необходимой информации о сессии.</exception>
+        </member>
+        <member name="M:AuthenticationMaui.Services.ILoginService.RegisterWithEmailAsync(System.String,System.String,System.String,System.Int64)">
             <summary>
             Регистрация с помощью электронной почты и пароля.
             </summary>
             <param name="login">Логин пользователя.</param>
             <param name="email">Адрес электронной почты.</param>
             <param name="password">Пароль аккаунта (не от почты).</param>
+            <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
             <returns>true случае успеха; иначе - false</returns>
         </member>
-        <member name="M:AuthenticationMaui.Services.ILoginService.SendPasswordResetEmailAsync(System.String)">
+        <member name="M:AuthenticationMaui.Services.ILoginService.SendPasswordResetEmailAsync(System.String,System.Int64)">
             <summary>
             Восстановление пароля по логину или электронной почте.
             </summary>
             <param name="loginOrEmail">Логин или адрес электронной почты.</param>
+            <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции сброса пароля.</param>
             <returns>true в случае успеха; иначе - false.</returns>
         </member>
         <member name="M:AuthenticationMaui.Services.ILoginService.Logout">
@@ -72,44 +105,77 @@
             </summary>
         </member>
         <!-- Badly formed XML comment ignored for member "M:AuthenticationMaui.Services.FirebaseLoginService.#ctor(AuthenticationMaui.Services.FirebaseLoginService.FirebaseLoginData)" -->
-        <member name="M:AuthenticationMaui.Services.FirebaseLoginService.LoginWithEmailAsync(System.String,System.String)">
+        <member name="M:AuthenticationMaui.Services.FirebaseLoginService.LoginWithEmailAsync(System.String,System.String,System.Int64)">
             <summary>
             Вход с помощью логина (или электронной почты) и пароля.
             </summary>
             <param name="loginOrEmail">Логин или адрес электронной почты.</param>
             <param name="password">Пароль аккаунта (не от почты).</param>
+            <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
             <returns>В случае успеха возвращается true, инача - false.</returns>
             <exception cref="T:Firebase.Auth.FirebaseAuthException">Обработка ошибок аутентификации. Например, неверный пароль или адрес электронной почты.</exception>
             <exception cref="T:System.Exception">Обработка других ошибок. Например, в хранилище типа IUserStorageService не найден логин.</exception>
         </member>
-        <member name="M:AuthenticationMaui.Services.FirebaseLoginService.LoginWithGoogleAsync">
+        <member name="M:AuthenticationMaui.Services.FirebaseLoginService.LoginWithGoogleAsync(System.Int64)">
             <summary>
             Вход с помощью Google аккаунта.
             </summary>
+            <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
             <returns>В случае успеха возвращается true, иначе - false.</returns>
-            <exception cref="T:System.Exception"></exception>
+            <exception cref="T:System.Exception">Исключение в случае неудачи авторизации через Google.</exception>
+        </member>
+        <member name="M:AuthenticationMaui.Services.FirebaseLoginService.LoginWithFacebookAsync(System.Int64)">
+            <summary>
+            Вход с помощью аккаунта Facebook.
+            </summary>
+            <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
+            <returns>В случае успеха возвращается true, иначе - false.</returns>
+        </member>
+        <member name="M:AuthenticationMaui.Services.FirebaseLoginService.RequestVerificationCodeAsync(System.String,System.Int64)">
+            <summary>
+            Отправляет запрос на генерацию и доставку проверочного кода на указанный номер телефона.
+            </summary>
+            <remarks>Этот метод связывается с внешней службой аутентификации для отправки проверочного кода. 
+            Убедитесь, что указанный номер телефона действителен и правильно отформатирован.</remarks>
+            <param name="phoneNumber">Номер телефона, на который будет отправлен проверочный код.</param>
+            <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции отправки кода.</param>
+            <returns><see cref="T:AuthenticationMaui.Services.PhoneAuthSessionResult"/> содержащий информацию о сеансе, необходимую для последующих шагов аутентификации.</returns>
+            <exception cref="T:System.Exception">Выбрасывается, если запрос завершился неудачей или ответ не содержит необходимой информации о сессии.</exception>
+        </member>
+        <member name="M:AuthenticationMaui.Services.FirebaseLoginService.LoginWithVerificationCodeAsync(System.String,System.String,System.Int64)">
+            <summary>
+            Авторизация с помощью проверочного кода, полученного на номер телефона.
+            </summary>
+            <param name="sessionInfo">Информация, полученная от Firebase для номера телефона,
+            введенного в параметр метода RequestVerificationCodeAsync.</param>
+            <param name="code">Код, полученный пользователем в СМС.</param>
+            <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
+            <returns>true, если аутентификация прошла успешно, false - в противном случае.</returns>
+            <exception cref="T:System.Exception">Выбрасывается, если запрос завершился неудачей или ответ не содержит необходимой информации о сессии.</exception>
         </member>
         <member name="M:AuthenticationMaui.Services.FirebaseLoginService.Logout">
             <summary>
             Выход из аккаунта.
             </summary>
         </member>
-        <member name="M:AuthenticationMaui.Services.FirebaseLoginService.RegisterWithEmailAsync(System.String,System.String,System.String)">
+        <member name="M:AuthenticationMaui.Services.FirebaseLoginService.RegisterWithEmailAsync(System.String,System.String,System.String,System.Int64)">
             <summary>
             Регистрация с помощью электронной почты и пароля.
             </summary>
             <param name="login">Логин пользователя.</param>
             <param name="email">Адрес электронной почты.</param>
             <param name="password">Пароль аккаунта (не от почты).</param>
+            <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
             <returns>true случае успеха; иначе - false</returns>
             <exception cref="T:Firebase.Auth.FirebaseAuthException">Обработка ошибок аутентификации. Например, неверный пароль или адрес электронной почты.</exception>
             <exception cref="T:System.Exception">Обработка других ошибок.Например, невалидная почта или невалидный пароль.</exception>
         </member>
-        <member name="M:AuthenticationMaui.Services.FirebaseLoginService.SendPasswordResetEmailAsync(System.String)">
+        <member name="M:AuthenticationMaui.Services.FirebaseLoginService.SendPasswordResetEmailAsync(System.String,System.Int64)">
             <summary>
             Восстановление пароля по логину или электронной почте.
             </summary>
             <param name="loginOrEmail">Логин или адрес электронной почты.</param>
+            <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции сброса пароля.</param>
             <returns>true в случае успеха; иначе - false.</returns>
             <exception cref="T:System.Exception">Ошибка сброса пароля. Например, неверный email или логин.</exception>
         </member>
@@ -128,6 +194,66 @@
             </summary>
             <param name="password">Пароль для проверки.</param>
             <returns>true, если пароль соответствует требованиям; иначе - false.</returns>
+        </member>
+        <member name="M:AuthenticationMaui.Services.FirebaseLoginService.NormalizePhoneNumber(System.String)">
+            <summary>
+            Нормализует номер телефона, удаляя все нечисловые символы и добавляя знак "+".
+            </summary>
+            <param name="phoneNumber">Номер телефона для нормализации. Не должно быть null.</param>
+            <returns>Нормализованная строка телефонного номера, начинающаяся с "+", после которого следуют цифры.</returns>
+        </member>
+        <member name="M:AuthenticationMaui.Services.FirebaseLoginService.IsValidPhoneNumber(System.String)">
+            <summary>
+            Определяет, действительно ли указанный телефонный номер соответствует формату E.164.
+            </summary>
+            <remarks>Формат E.164 - это международный стандарт для телефонных номеров, требующий наличия знака "+" в начале и последующих 10-15 цифр. 
+            Этот метод проверяет, что вводимые данные не являются нулевыми, пустыми или с пробелами, и соответствуют требуемому формату.</remarks>
+            <param name="phoneNumber">Номер телефона для проверки.</param>
+            <returns><see langword="true"/> если номер телефона действителен в соответствии с форматом E.164; иначе, <see langword="false"/>.</returns>
+        </member>
+        <member name="M:AuthenticationMaui.Services.FirebaseLoginService.PhoneNumberRegex">
+            <remarks>
+            Pattern:<br/>
+            <code>^\\+\\d{10,15}$</code><br/>
+            Explanation:<br/>
+            <code>
+            ○ Match if at the beginning of the string.<br/>
+            ○ Match '+'.<br/>
+            ○ Match a Unicode digit atomically at least 10 and at most 15 times.<br/>
+            ○ Match if at the end of the string or if before an ending newline.<br/>
+            </code>
+            </remarks>
+        </member>
+        <member name="M:AuthenticationMaui.Services.FirebaseLoginService.NormalizePhoneNumberRegex">
+            <remarks>
+            Pattern:<br/>
+            <code>[^\\d]</code><br/>
+            Explanation:<br/>
+            <code>
+            ○ Match a character in the set [^\d].<br/>
+            </code>
+            </remarks>
+        </member>
+        <member name="M:AuthenticationMaui.Services.FirebaseLoginService.ValidPasswordRegex">
+            <remarks>
+            Pattern:<br/>
+            <code>^[a-zA-Z0-9~`!@#$%^&amp;*()\\-_+=|}\\]{\\[":;?\\/&gt;.&lt;,\\s]{6,}$</code><br/>
+            Explanation:<br/>
+            <code>
+            ○ Match if at the beginning of the string.<br/>
+            ○ Match a character in the set [!-&amp;(-[]-~\s] greedily at least 6 times.<br/>
+            ○ Match if at the end of the string or if before an ending newline.<br/>
+            </code>
+            </remarks>
+        </member>
+        <member name="M:AuthenticationMaui.Services.FirebaseLoginService.CallWithTimeout(System.Func{System.Threading.Tasks.Task{System.Boolean}},System.Threading.CancellationToken)">
+            <summary>
+            Выполняет асинхронную операцию с таймаутом.
+            </summary>
+            <param name="asyncOperation">Асинхронная операция</param>
+            <param name="token">Токен сброса операции</param>
+            <returns><see cref="T:System.Threading.Tasks.Task"/> с результатом операции типа <see cref="T:System.Boolean"/></returns>
+            <exception cref="T:System.OperationCanceledException"></exception>
         </member>
         <member name="M:AuthenticationMaui.Services.UserSecureStorageService.AddUserAsync(System.String,System.String)">
             <summary>
@@ -287,6 +413,112 @@
             <param name = "easing">The easing function to be used in the animation</param>
             <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
             <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.PhoneNumberRegex_0">
+            <summary>Custom <see cref="T:System.Text.RegularExpressions.Regex"/>-derived type for the PhoneNumberRegex method.</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.PhoneNumberRegex_0.Instance">
+            <summary>Cached, thread-safe singleton instance.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.PhoneNumberRegex_0.#ctor">
+            <summary>Initializes the instance.</summary>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.PhoneNumberRegex_0.RunnerFactory">
+            <summary>Provides a factory for creating <see cref="T:System.Text.RegularExpressions.RegexRunner"/> instances to be used by methods on <see cref="T:System.Text.RegularExpressions.Regex"/>.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.PhoneNumberRegex_0.RunnerFactory.CreateInstance">
+            <summary>Creates an instance of a <see cref="T:System.Text.RegularExpressions.RegexRunner"/> used by methods on <see cref="T:System.Text.RegularExpressions.Regex"/>.</summary>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.PhoneNumberRegex_0.RunnerFactory.Runner">
+            <summary>Provides the runner that contains the custom logic implementing the specified regular expression.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.PhoneNumberRegex_0.RunnerFactory.Runner.Scan(System.ReadOnlySpan{System.Char})">
+            <summary>Scan the <paramref name="inputSpan"/> starting from base.runtextstart for the next match.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.PhoneNumberRegex_0.RunnerFactory.Runner.TryFindNextPossibleStartingPosition(System.ReadOnlySpan{System.Char})">
+            <summary>Search <paramref name="inputSpan"/> starting from base.runtextpos for the next location a match could possibly start.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+            <returns>true if a possible match was found; false if no more matches are possible.</returns>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.PhoneNumberRegex_0.RunnerFactory.Runner.TryMatchAtCurrentPosition(System.ReadOnlySpan{System.Char})">
+            <summary>Determine whether <paramref name="inputSpan"/> at base.runtextpos is a match for the regular expression.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+            <returns>true if the regular expression matches at the current position; otherwise, false.</returns>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.NormalizePhoneNumberRegex_1">
+            <summary>Custom <see cref="T:System.Text.RegularExpressions.Regex"/>-derived type for the NormalizePhoneNumberRegex method.</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.NormalizePhoneNumberRegex_1.Instance">
+            <summary>Cached, thread-safe singleton instance.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.NormalizePhoneNumberRegex_1.#ctor">
+            <summary>Initializes the instance.</summary>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.NormalizePhoneNumberRegex_1.RunnerFactory">
+            <summary>Provides a factory for creating <see cref="T:System.Text.RegularExpressions.RegexRunner"/> instances to be used by methods on <see cref="T:System.Text.RegularExpressions.Regex"/>.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.NormalizePhoneNumberRegex_1.RunnerFactory.CreateInstance">
+            <summary>Creates an instance of a <see cref="T:System.Text.RegularExpressions.RegexRunner"/> used by methods on <see cref="T:System.Text.RegularExpressions.Regex"/>.</summary>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.NormalizePhoneNumberRegex_1.RunnerFactory.Runner">
+            <summary>Provides the runner that contains the custom logic implementing the specified regular expression.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.NormalizePhoneNumberRegex_1.RunnerFactory.Runner.Scan(System.ReadOnlySpan{System.Char})">
+            <summary>Scan the <paramref name="inputSpan"/> starting from base.runtextstart for the next match.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.NormalizePhoneNumberRegex_1.RunnerFactory.Runner.TryFindNextPossibleStartingPosition(System.ReadOnlySpan{System.Char})">
+            <summary>Search <paramref name="inputSpan"/> starting from base.runtextpos for the next location a match could possibly start.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+            <returns>true if a possible match was found; false if no more matches are possible.</returns>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.ValidPasswordRegex_2">
+            <summary>Custom <see cref="T:System.Text.RegularExpressions.Regex"/>-derived type for the ValidPasswordRegex method.</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.ValidPasswordRegex_2.Instance">
+            <summary>Cached, thread-safe singleton instance.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.ValidPasswordRegex_2.#ctor">
+            <summary>Initializes the instance.</summary>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.ValidPasswordRegex_2.RunnerFactory">
+            <summary>Provides a factory for creating <see cref="T:System.Text.RegularExpressions.RegexRunner"/> instances to be used by methods on <see cref="T:System.Text.RegularExpressions.Regex"/>.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.ValidPasswordRegex_2.RunnerFactory.CreateInstance">
+            <summary>Creates an instance of a <see cref="T:System.Text.RegularExpressions.RegexRunner"/> used by methods on <see cref="T:System.Text.RegularExpressions.Regex"/>.</summary>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.ValidPasswordRegex_2.RunnerFactory.Runner">
+            <summary>Provides the runner that contains the custom logic implementing the specified regular expression.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.ValidPasswordRegex_2.RunnerFactory.Runner.Scan(System.ReadOnlySpan{System.Char})">
+            <summary>Scan the <paramref name="inputSpan"/> starting from base.runtextstart for the next match.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.ValidPasswordRegex_2.RunnerFactory.Runner.TryFindNextPossibleStartingPosition(System.ReadOnlySpan{System.Char})">
+            <summary>Search <paramref name="inputSpan"/> starting from base.runtextpos for the next location a match could possibly start.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+            <returns>true if a possible match was found; false if no more matches are possible.</returns>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.ValidPasswordRegex_2.RunnerFactory.Runner.TryMatchAtCurrentPosition(System.ReadOnlySpan{System.Char})">
+            <summary>Determine whether <paramref name="inputSpan"/> at base.runtextpos is a match for the regular expression.</summary>
+            <param name="inputSpan">The text being scanned by the regular expression.</param>
+            <returns>true if the regular expression matches at the current position; otherwise, false.</returns>
+        </member>
+        <member name="T:System.Text.RegularExpressions.Generated.Utilities">
+            <summary>Helper methods used by generated <see cref="T:System.Text.RegularExpressions.Regex"/>-derived implementations.</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_defaultTimeout">
+            <summary>Default timeout value set in <see cref="T:System.AppContext"/>, or <see cref="F:System.Text.RegularExpressions.Regex.InfiniteMatchTimeout"/> if none was set.</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_hasTimeout">
+            <summary>Whether <see cref="F:System.Text.RegularExpressions.Generated.Utilities.s_defaultTimeout"/> is non-infinite.</summary>
+        </member>
+        <member name="M:System.Text.RegularExpressions.Generated.Utilities.IndexOfAnyExceptDecimalDigitNumber(System.ReadOnlySpan{System.Char})">
+            <summary>Finds the next index of any character that matches a character in the set [^\d].</summary>
+        </member>
+        <member name="F:System.Text.RegularExpressions.Generated.Utilities.s_asciiDigits">
+            <summary>Supports searching for characters in or not in "0123456789".</summary>
         </member>
     </members>
 </doc>

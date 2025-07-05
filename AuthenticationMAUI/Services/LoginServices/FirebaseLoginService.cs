@@ -19,11 +19,6 @@ public partial class FirebaseLoginService : ILoginService
         public string? GoogleRedirectUri { get; set; }
         public string? CallbackScheme { get; set; }
     }
-
-    public class PhoneAuthSessionResult
-    {
-        public string SessionInfo { get; set; } = string.Empty;
-    }
     #endregion
 
     #region Private Inner Classes
@@ -89,10 +84,11 @@ public partial class FirebaseLoginService : ILoginService
     /// </summary>
     /// <param name="loginOrEmail">Логин или адрес электронной почты.</param>
     /// <param name="password">Пароль аккаунта (не от почты).</param>
+    /// <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
     /// <returns>В случае успеха возвращается true, инача - false.</returns>
     /// <exception cref="FirebaseAuthException">Обработка ошибок аутентификации. Например, неверный пароль или адрес электронной почты.</exception>
     /// <exception cref="Exception">Обработка других ошибок. Например, в хранилище типа IUserStorageService не найден логин.</exception>
-    public async Task<bool> LoginWithEmailAsync(string loginOrEmail, string password)
+    public async Task<bool> LoginWithEmailAsync(string loginOrEmail, string password, long timeoutMilliseconds)
     {
         try
         {
@@ -103,9 +99,13 @@ public partial class FirebaseLoginService : ILoginService
 
             if (!IsValidPassword(password))
                 throw new ArgumentException("Password is not valid.");
-
-            var result = await authClient.SignInWithEmailAndPasswordAsync(email, password);
-            return !string.IsNullOrEmpty(result?.User?.Info?.Email);
+            var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(timeoutMilliseconds));
+            return await CallWithTimeout(async () =>
+                {
+                    var userCredential = await authClient.SignInWithEmailAndPasswordAsync(email, password);
+                    return !string.IsNullOrEmpty(userCredential?.User?.Info?.Email);
+                },
+                cts.Token);
         }
         catch (FirebaseAuthException ex)
         {
@@ -122,9 +122,10 @@ public partial class FirebaseLoginService : ILoginService
     /// <summary>
     /// Вход с помощью Google аккаунта.
     /// </summary>
+    /// <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
     /// <returns>В случае успеха возвращается true, иначе - false.</returns>
-    /// <exception cref="Exception"></exception>
-    public async Task<bool> LoginWithGoogleAsync()
+    /// <exception cref="Exception">Исключение в случае неудачи авторизации через Google.</exception>
+    public async Task<bool> LoginWithGoogleAsync(long timeoutMilliseconds)
     {
         // WinUI не поддерживает WebAuthenticator.
         if (DeviceInfo.Platform == DevicePlatform.WinUI)
@@ -132,31 +133,50 @@ public partial class FirebaseLoginService : ILoginService
 
         try
         {
-            var startUri = new Uri(
-              "https://accounts.google.com/o/oauth2/v2/auth" +
-              $"?client_id={googleClientId}" +
-              $"&redirect_uri={googleRedirectUri}" +
-              "&response_type=id_token" +
-              "&scope=openid%20email%20profile" +
-              $"&nonce={Guid.NewGuid()}");
+            var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(timeoutMilliseconds));
 
-            var endUri = new Uri($"{callbackScheme}");
+            return await CallWithTimeout(async () =>
+            {
+                var startUri = new Uri(
+                  "https://accounts.google.com/o/oauth2/v2/auth" +
+                  $"?client_id={googleClientId}" +
+                  $"&redirect_uri={googleRedirectUri}" +
+                  "&response_type=id_token" +
+                  "&scope=openid%20email%20profile" +
+                  $"&nonce={Guid.NewGuid()}");
 
-            var authResult = await WebAuthenticator.AuthenticateAsync(startUri, endUri);
+                var endUri = new Uri($"{callbackScheme}");
 
-            if (!authResult.Properties.TryGetValue("id_token", out var idToken))
-                throw new Exception("Google authentication failed: No code received.");
+                var authResult = await WebAuthenticator.AuthenticateAsync(startUri, endUri);
 
-            var credential = GoogleProvider.GetCredential(idToken, OAuthCredentialTokenType.IdToken);
+                if (!authResult.Properties.TryGetValue("id_token", out var idToken))
+                    throw new Exception("Google authentication failed: No code received.");
 
-            var result = await authClient.SignInWithCredentialAsync(credential);
+                var credential = GoogleProvider.GetCredential(idToken, OAuthCredentialTokenType.IdToken);
 
-            return !string.IsNullOrEmpty(result?.User?.Info?.Email);
+                var result = await authClient.SignInWithCredentialAsync(credential);
+
+                return !string.IsNullOrEmpty(result?.User?.Info?.Email);
+            },
+            cts.Token);
         }
         catch (Exception ex)
         {
             throw new Exception($"Google Login failed: {ex.Message}", ex);
         }
+    }
+    #endregion
+
+    #region LoginWithFacebookAsync Method
+    /// <summary>
+    /// Вход с помощью аккаунта Facebook.
+    /// </summary>
+    /// <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
+    /// <returns>В случае успеха возвращается true, иначе - false.</returns>
+    public async Task<bool> LoginWithFacebookAsync(long timeoutMilliseconds)
+    {
+        // TODO: Not Implemented
+        return false;
     }
     #endregion
 
@@ -167,25 +187,29 @@ public partial class FirebaseLoginService : ILoginService
     /// <remarks>Этот метод связывается с внешней службой аутентификации для отправки проверочного кода. 
     /// Убедитесь, что указанный номер телефона действителен и правильно отформатирован.</remarks>
     /// <param name="phoneNumber">Номер телефона, на который будет отправлен проверочный код.</param>
+    /// <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции отправки кода.</param>
     /// <returns><see cref="PhoneAuthSessionResult"/> содержащий информацию о сеансе, необходимую для последующих шагов аутентификации.</returns>
     /// <exception cref="Exception">Выбрасывается, если запрос завершился неудачей или ответ не содержит необходимой информации о сессии.</exception>
-    public async Task<PhoneAuthSessionResult> RequestVerificationCodeAsync(string phoneNumber)
+    public async Task<PhoneAuthSessionResult> RequestVerificationCodeAsync(string phoneNumber, long timeoutMilliseconds)
     {
         var normalizedPhoneNumber = NormalizePhoneNumber(phoneNumber);
         if (!IsValidPhoneNumber(normalizedPhoneNumber))
             throw new ArgumentException("Phone number is not valid. It should be in E.164 format, e.g., +1234567890.");
-        
+
         var request = new
         {
             normalizedPhoneNumber,
             recaptchaToken = "test"
         };
 
+        var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(timeoutMilliseconds));
+
         var response = await httpClient.PostAsJsonAsync(
             requestUri: $"https://identitytoolkit.googleapis.com/v1/accounts:sendVerificationCode?key={apiKey}",
-            value: request);
+            value: request,
+            cancellationToken: cts.Token);
 
-        var json = await response.Content.ReadAsStringAsync();
+        var json = await response.Content.ReadAsStringAsync(cancellationToken: cts.Token);
         if (!response.IsSuccessStatusCode)
             throw new Exception($"Phone auth code request failed: {json}");
 
@@ -201,9 +225,10 @@ public partial class FirebaseLoginService : ILoginService
     /// <param name="sessionInfo">Информация, полученная от Firebase для номера телефона,
     /// введенного в параметр метода RequestVerificationCodeAsync.</param>
     /// <param name="code">Код, полученный пользователем в СМС.</param>
+    /// <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
     /// <returns>true, если аутентификация прошла успешно, false - в противном случае.</returns>
     /// <exception cref="Exception">Выбрасывается, если запрос завершился неудачей или ответ не содержит необходимой информации о сессии.</exception>
-    public async Task<bool> LoginWithVerificationCodeAsync(string sessionInfo, string code)
+    public async Task<bool> LoginWithVerificationCodeAsync(string sessionInfo, string code, long timeoutMilliseconds)
     {
         var request = new
         {
@@ -211,11 +236,14 @@ public partial class FirebaseLoginService : ILoginService
             code
         };
 
+        var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(timeoutMilliseconds));
+
         var response = await httpClient.PostAsJsonAsync(
             requestUri: $"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPhoneNumber?key={apiKey}",
-            value: request);
+            value: request, 
+            cancellationToken: cts.Token);
 
-        var json = await response.Content.ReadAsStringAsync();
+        var json = await response.Content.ReadAsStringAsync(cancellationToken: cts.Token);
         if (!response.IsSuccessStatusCode)
             throw new Exception($"Phone auth login failed: {json}");
 
@@ -248,10 +276,11 @@ public partial class FirebaseLoginService : ILoginService
     /// <param name="login">Логин пользователя.</param>
     /// <param name="email">Адрес электронной почты.</param>
     /// <param name="password">Пароль аккаунта (не от почты).</param>
+    /// <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
     /// <returns>true случае успеха; иначе - false</returns>
     /// <exception cref="FirebaseAuthException">Обработка ошибок аутентификации. Например, неверный пароль или адрес электронной почты.</exception>
     /// <exception cref="Exception">Обработка других ошибок.Например, невалидная почта или невалидный пароль.</exception>
-    public async Task<bool> RegisterWithEmailAsync(string login, string email, string password)
+    public async Task<bool> RegisterWithEmailAsync(string login, string email, string password, long timeoutMilliseconds)
     {
         try
         {
@@ -264,9 +293,14 @@ public partial class FirebaseLoginService : ILoginService
             if (!await userStorageService.LoginExistsAsync(login))
                 await userStorageService.AddUserAsync(login, email);
 
-            var registrationResult = await authClient.CreateUserWithEmailAndPasswordAsync(email, password, login);
+            var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(timeoutMilliseconds));
 
-            return !string.IsNullOrEmpty(registrationResult?.User?.Info?.Email);
+            return await CallWithTimeout(async() =>
+                {
+                    var registrationResult = await authClient.CreateUserWithEmailAndPasswordAsync(email, password, login);
+                    return !string.IsNullOrEmpty(registrationResult?.User?.Info?.Email);
+                }, 
+                cts.Token);
         }
         catch (FirebaseAuthException ex)
         {
@@ -284,9 +318,10 @@ public partial class FirebaseLoginService : ILoginService
     /// Восстановление пароля по логину или электронной почте.
     /// </summary>
     /// <param name="loginOrEmail">Логин или адрес электронной почты.</param>
+    /// <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции сброса пароля.</param>
     /// <returns>true в случае успеха; иначе - false.</returns>
     /// <exception cref="Exception">Ошибка сброса пароля. Например, неверный email или логин.</exception>
-    public async Task SendPasswordResetEmailAsync(string loginOrEmail)
+    public async Task SendPasswordResetEmailAsync(string loginOrEmail, long timeoutMilliseconds)
     {
         try
         {
@@ -295,7 +330,15 @@ public partial class FirebaseLoginService : ILoginService
                 : await userStorageService.GetEmailByLoginAsync(loginOrEmail)
                     ?? throw new Exception("Login not found in the IUserStorageService.");
 
-            await authClient.ResetEmailPasswordAsync(loginOrEmail);
+            var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(timeoutMilliseconds));
+
+            _ = await CallWithTimeout(async () =>
+                {
+                    await authClient.ResetEmailPasswordAsync(loginOrEmail);
+                    return true; // Возвращаем true, если сброс пароля прошел успешно
+                },
+                cts.Token);
+
             // очистка хранилища
             userStorageService.RemoveUserAsync(loginOrEmail);
         }
@@ -380,6 +423,28 @@ public partial class FirebaseLoginService : ILoginService
     private static partial Regex NormalizePhoneNumberRegex();
 
     [GeneratedRegex(@"^[a-zA-Z0-9~`!@#$%^&*()\-_+=|}\]{\["":;?\/>.<,\s]{6,}$")]
-    private static partial Regex ValidPasswordRegex(); 
+    private static partial Regex ValidPasswordRegex();
+    #endregion
+
+    #region CallWithTimeout Method
+    /// <summary>
+    /// Выполняет асинхронную операцию с таймаутом.
+    /// </summary>
+    /// <param name="asyncOperation">Асинхронная операция</param>
+    /// <param name="token">Токен сброса операции</param>
+    /// <returns><see cref="Task"/> с результатом операции типа <see cref="bool"/></returns>
+    /// <exception cref="OperationCanceledException"></exception>
+    private async Task<bool> CallWithTimeout(Func<Task<bool>> asyncOperation, CancellationToken token)
+    {
+        var task = asyncOperation();
+        var cancelTask = Task.Delay(Timeout.Infinite, token);
+
+        var completed = await Task.WhenAny(task, cancelTask);
+
+        if (completed == cancelTask)
+            throw new OperationCanceledException(token); // отмена операции
+
+        return await task; // Нормальное завершение задачи 
+    }
     #endregion
 }
