@@ -39,22 +39,20 @@ public interface ILoginService
     /// Убедитесь, что указанный номер телефона действителен и правильно отформатирован.</remarks>
     /// <param name="phoneNumber">Номер телефона, на который будет отправлен проверочный код.</param>
     /// <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции отправки кода.</param>
-    /// <returns><see cref="PhoneAuthSessionResult"/> содержащий информацию о сеансе, необходимую для последующих шагов аутентификации.</returns>
+    /// <returns>true, если запрос отправлен успешно, иначе - false</returns>
     /// <exception cref="Exception">Выбрасывается, если запрос завершился неудачей или ответ не содержит необходимой информации о сессии.</exception>
-    Task<PhoneAuthSessionResult> RequestVerificationCodeAsync(string phoneNumber, long timeoutMilliseconds);
+    Task<bool> RequestVerificationCodeAsync(string phoneNumber, long timeoutMilliseconds);
     #endregion
 
     #region LoginWithVerificationCodeAsync Method
     /// <summary>
     /// Авторизация с помощью проверочного кода, полученного на номер телефона.
     /// </summary>
-    /// <param name="sessionInfo">Информация, полученная для номера телефона,
-    /// введенного в параметр метода RequestVerificationCodeAsync.</param>
     /// <param name="code">Код, полученный пользователем в СМС.</param>
     /// <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
     /// <returns>true, если аутентификация прошла успешно, false - в противном случае.</returns>
     /// <exception cref="Exception">Выбрасывается, если запрос завершился неудачей или ответ не содержит необходимой информации о сессии.</exception>
-    Task<bool> LoginWithVerificationCodeAsync(string sessionInfo, string code, long timeoutMilliseconds);
+    Task<bool> LoginWithVerificationCodeAsync(string code, long timeoutMilliseconds);
     #endregion
 
     #region RegisterWithEmailAsync Method

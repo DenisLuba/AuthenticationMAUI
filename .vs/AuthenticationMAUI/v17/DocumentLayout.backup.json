@@ -3,8 +3,8 @@
   "WorkspaceRootPath": "V:\\MAUI Projects\\AuthenticationMAUI\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{FBC3048B-5A1D-48FA-BF93-BEEE537DC66C}|AuthenticationMAUI\\AuthenticationMAUI.csproj|v:\\maui projects\\authenticationmaui\\authenticationmaui\\services\\firebaseloginservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FBC3048B-5A1D-48FA-BF93-BEEE537DC66C}|AuthenticationMAUI\\AuthenticationMAUI.csproj|solutionrelative:authenticationmaui\\services\\firebaseloginservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{FBC3048B-5A1D-48FA-BF93-BEEE537DC66C}|AuthenticationMAUI\\AuthenticationMAUI.csproj|v:\\maui projects\\authenticationmaui\\authenticationmaui\\services\\loginservices\\firebaseloginservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FBC3048B-5A1D-48FA-BF93-BEEE537DC66C}|AuthenticationMAUI\\AuthenticationMAUI.csproj|solutionrelative:authenticationmaui\\services\\loginservices\\firebaseloginservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -48,13 +48,13 @@
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "FirebaseLoginService.cs",
-              "DocumentMoniker": "V:\\MAUI Projects\\AuthenticationMAUI\\AuthenticationMAUI\\Services\\FirebaseLoginService.cs",
-              "RelativeDocumentMoniker": "AuthenticationMAUI\\Services\\FirebaseLoginService.cs",
-              "ToolTip": "V:\\MAUI Projects\\AuthenticationMAUI\\AuthenticationMAUI\\Services\\FirebaseLoginService.cs",
-              "RelativeToolTip": "AuthenticationMAUI\\Services\\FirebaseLoginService.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAACUAAAA2AAAAAAAAAA==",
+              "DocumentMoniker": "V:\\MAUI Projects\\AuthenticationMAUI\\AuthenticationMAUI\\Services\\LoginServices\\FirebaseLoginService.cs",
+              "RelativeDocumentMoniker": "AuthenticationMAUI\\Services\\LoginServices\\FirebaseLoginService.cs",
+              "ToolTip": "V:\\MAUI Projects\\AuthenticationMAUI\\AuthenticationMAUI\\Services\\LoginServices\\FirebaseLoginService.cs",
+              "RelativeToolTip": "AuthenticationMAUI\\Services\\LoginServices\\FirebaseLoginService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-22T21:56:59.313Z",
+              "WhenOpened": "2025-06-27T23:23:03.526Z",
               "EditorCaption": ""
             }
           ]

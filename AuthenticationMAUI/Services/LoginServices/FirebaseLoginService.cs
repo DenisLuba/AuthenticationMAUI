@@ -1,8 +1,10 @@
 ﻿using Firebase.Auth;
 using Firebase.Auth.Providers;
+using System.Diagnostics;
 using System.Net.Http.Json;
 using System.Net.Mail;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
 namespace AuthenticationMaui.Services;
@@ -24,11 +26,13 @@ public partial class FirebaseLoginService : ILoginService
     #region Private Inner Classes
     private class PhoneCodeResponse
     {
+        [JsonPropertyName("sessionInfo")]
         public string SessionInfo { get; set; } = string.Empty;
     }
 
     private class PhoneLoginResponse
     {
+        [JsonPropertyName("idToken")]
         public string IdToken { get; set; } = string.Empty;
     }
     #endregion
@@ -40,7 +44,8 @@ public partial class FirebaseLoginService : ILoginService
     private string googleRedirectUri;
     private string callbackScheme;
     private string apiKey;
-    private static readonly HttpClient httpClient = new();
+    private static readonly Lazy<HttpClient> httpClient = new();
+    private static PhoneAuthSessionResult? sessionResult;
     #endregion
 
     #region Constructor
@@ -188,9 +193,9 @@ public partial class FirebaseLoginService : ILoginService
     /// Убедитесь, что указанный номер телефона действителен и правильно отформатирован.</remarks>
     /// <param name="phoneNumber">Номер телефона, на который будет отправлен проверочный код.</param>
     /// <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции отправки кода.</param>
-    /// <returns><see cref="PhoneAuthSessionResult"/> содержащий информацию о сеансе, необходимую для последующих шагов аутентификации.</returns>
+    /// <returns>true, если запрос отправлен успешно, иначе - false</returns>
     /// <exception cref="Exception">Выбрасывается, если запрос завершился неудачей или ответ не содержит необходимой информации о сессии.</exception>
-    public async Task<PhoneAuthSessionResult> RequestVerificationCodeAsync(string phoneNumber, long timeoutMilliseconds)
+    public async Task<bool> RequestVerificationCodeAsync(string phoneNumber, long timeoutMilliseconds)
     {
         var normalizedPhoneNumber = NormalizePhoneNumber(phoneNumber);
         if (!IsValidPhoneNumber(normalizedPhoneNumber))
@@ -198,23 +203,37 @@ public partial class FirebaseLoginService : ILoginService
 
         var request = new
         {
-            normalizedPhoneNumber,
+            phoneNumber = normalizedPhoneNumber,
             recaptchaToken = "test"
         };
 
-        var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(timeoutMilliseconds));
+        using var requestMessage = new HttpRequestMessage(
+            method: HttpMethod.Post,
+            requestUri: $"https://identitytoolkit.googleapis.com/v1/accounts:sendVerificationCode?key={apiKey}")
+        {
+            Content = JsonContent.Create(request)
+        };
 
-        var response = await httpClient.PostAsJsonAsync(
-            requestUri: $"https://identitytoolkit.googleapis.com/v1/accounts:sendVerificationCode?key={apiKey}",
-            value: request,
-            cancellationToken: cts.Token);
+        var sendTask = httpClient.Value.SendAsync(requestMessage);
+        var timeoutTask = Task.Delay(TimeSpan.FromMilliseconds(timeoutMilliseconds));
 
-        var json = await response.Content.ReadAsStringAsync(cancellationToken: cts.Token);
+        var completedTask = await Task.WhenAny(sendTask, timeoutTask);
+
+        if (completedTask == timeoutTask)
+            throw new TimeoutException("The operation timed out while waiting for Firebase response.");
+
+        using var response = await sendTask.ConfigureAwait(false);
+        var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+        //Log
+        Trace.WriteLine(json);
+
         if (!response.IsSuccessStatusCode)
             throw new Exception($"Phone auth code request failed: {json}");
 
         var result = JsonSerializer.Deserialize<PhoneCodeResponse>(json);
-        return new PhoneAuthSessionResult { SessionInfo = result?.SessionInfo ?? throw new Exception("Missing sessionInfo") };
+        sessionResult = new PhoneAuthSessionResult { SessionInfo = result?.SessionInfo ?? throw new Exception("Missing sessionInfo") };
+        return !string.IsNullOrWhiteSpace(sessionResult.SessionInfo );
     }
     #endregion
 
@@ -222,28 +241,40 @@ public partial class FirebaseLoginService : ILoginService
     /// <summary>
     /// Авторизация с помощью проверочного кода, полученного на номер телефона.
     /// </summary>
-    /// <param name="sessionInfo">Информация, полученная от Firebase для номера телефона,
-    /// введенного в параметр метода RequestVerificationCodeAsync.</param>
     /// <param name="code">Код, полученный пользователем в СМС.</param>
     /// <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
     /// <returns>true, если аутентификация прошла успешно, false - в противном случае.</returns>
     /// <exception cref="Exception">Выбрасывается, если запрос завершился неудачей или ответ не содержит необходимой информации о сессии.</exception>
-    public async Task<bool> LoginWithVerificationCodeAsync(string sessionInfo, string code, long timeoutMilliseconds)
+    public async Task<bool> LoginWithVerificationCodeAsync(string code, long timeoutMilliseconds)
     {
         var request = new
         {
-            sessionInfo,
-            code
+            sessionInfo = sessionResult?.SessionInfo,
+            code = code
         };
 
-        var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(timeoutMilliseconds));
+        using var requestMessage = new HttpRequestMessage(
+            method: HttpMethod.Post,
+            requestUri: $"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPhoneNumber?key={apiKey}")
+        {
+            Content = JsonContent.Create(request)
+        };
 
-        var response = await httpClient.PostAsJsonAsync(
-            requestUri: $"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPhoneNumber?key={apiKey}",
-            value: request, 
-            cancellationToken: cts.Token);
+        var sendTask = httpClient.Value.SendAsync(requestMessage);
+        var timeoutTask = Task.Delay(TimeSpan.FromMilliseconds(timeoutMilliseconds));
 
-        var json = await response.Content.ReadAsStringAsync(cancellationToken: cts.Token);
+        var completedTask = await Task.WhenAny(sendTask, timeoutTask);
+
+        if (completedTask == timeoutTask)
+            throw new TimeoutException("The operation timed out while waiting for Firebase response.");
+
+        using var response = await sendTask.ConfigureAwait(false);
+
+        var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+        //Log
+        Trace.WriteLine(json);
+
         if (!response.IsSuccessStatusCode)
             throw new Exception($"Phone auth login failed: {json}");
 
