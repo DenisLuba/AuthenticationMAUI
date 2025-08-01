@@ -1,0 +1,19 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+<body>
+    <div class="g-recaptcha"
+         data-sitekey="6LcCAYgrAAAAAIxpBbHzPgG-SS_IOrgv5JlQ3Lwv"
+         data-size="invisible"
+         data-callback="onSolved"></div>
+    <script>
+        function onSolved(token) {
+            const scheme = new URLSearchParams(location.search).get('scheme');
+            window.location.href = `${scheme}://recaptcha?token=${token}`;
+        }
+        grecaptcha.ready(() => grecaptcha.execute());
+    </script>
+</body>
+</html>

@@ -17,6 +17,7 @@ V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-ios\Auth
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-ios\AuthenticationMAUI.AssemblyInfo.cs
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-ios\AuthenticationMAUI.csproj.CoreCompileInputs.cache
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-ios\AuthenticationMAUI.sourcelink.json
+V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-ios\XamlC.stamp
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-ios\AuthenticationMAUI.dll
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-ios\refint\AuthenticationMAUI.dll
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-ios\AuthenticationMAUI.pdb

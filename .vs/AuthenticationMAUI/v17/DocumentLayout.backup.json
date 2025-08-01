@@ -5,6 +5,30 @@
     {
       "AbsoluteMoniker": "D:0:0:{FBC3048B-5A1D-48FA-BF93-BEEE537DC66C}|AuthenticationMAUI\\AuthenticationMAUI.csproj|v:\\maui projects\\authenticationmaui\\authenticationmaui\\services\\loginservices\\firebaseloginservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{FBC3048B-5A1D-48FA-BF93-BEEE537DC66C}|AuthenticationMAUI\\AuthenticationMAUI.csproj|solutionrelative:authenticationmaui\\services\\loginservices\\firebaseloginservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FBC3048B-5A1D-48FA-BF93-BEEE537DC66C}|AuthenticationMAUI\\AuthenticationMAUI.csproj|v:\\maui projects\\authenticationmaui\\authenticationmaui\\authenticationmaui.firebasehosttemplate\\firebase.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{FBC3048B-5A1D-48FA-BF93-BEEE537DC66C}|AuthenticationMAUI\\AuthenticationMAUI.csproj|solutionrelative:authenticationmaui\\authenticationmaui.firebasehosttemplate\\firebase.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FBC3048B-5A1D-48FA-BF93-BEEE537DC66C}|AuthenticationMAUI\\AuthenticationMAUI.csproj|v:\\maui projects\\authenticationmaui\\authenticationmaui\\pages\\recaptchawebview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FBC3048B-5A1D-48FA-BF93-BEEE537DC66C}|AuthenticationMAUI\\AuthenticationMAUI.csproj|solutionrelative:authenticationmaui\\pages\\recaptchawebview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FBC3048B-5A1D-48FA-BF93-BEEE537DC66C}|AuthenticationMAUI\\AuthenticationMAUI.csproj|v:\\maui projects\\authenticationmaui\\authenticationmaui\\pages\\recaptchawebview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{FBC3048B-5A1D-48FA-BF93-BEEE537DC66C}|AuthenticationMAUI\\AuthenticationMAUI.csproj|solutionrelative:authenticationmaui\\pages\\recaptchawebview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FBC3048B-5A1D-48FA-BF93-BEEE537DC66C}|AuthenticationMAUI\\AuthenticationMAUI.csproj|v:\\maui projects\\authenticationmaui\\authenticationmaui\\services\\loginservices\\recaptchaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FBC3048B-5A1D-48FA-BF93-BEEE537DC66C}|AuthenticationMAUI\\AuthenticationMAUI.csproj|solutionrelative:authenticationmaui\\services\\loginservices\\recaptchaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FBC3048B-5A1D-48FA-BF93-BEEE537DC66C}|AuthenticationMAUI\\AuthenticationMAUI.csproj|v:\\maui projects\\authenticationmaui\\authenticationmaui\\interfaces\\iloginservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FBC3048B-5A1D-48FA-BF93-BEEE537DC66C}|AuthenticationMAUI\\AuthenticationMAUI.csproj|solutionrelative:authenticationmaui\\interfaces\\iloginservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|V:\\MAUI Projects\\AuthenticationMAUI\\AuthenticationMAUI\\AuthenticationMAUI.FirebaseHostTemplate\\\u041D\u043E\u0432\u0430\u044F \u043F\u0430\u043F\u043A\u0430\\firebase.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:AuthenticationMAUI\\AuthenticationMAUI.FirebaseHostTemplate\\\u041D\u043E\u0432\u0430\u044F \u043F\u0430\u043F\u043A\u0430\\firebase.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,7 +38,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 13,
           "Children": [
             {
               "$type": "Bookmark",
@@ -46,13 +70,86 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "firebase.json",
+              "DocumentMoniker": "V:\\MAUI Projects\\AuthenticationMAUI\\AuthenticationMAUI\\AuthenticationMAUI.FirebaseHostTemplate\\firebase.json",
+              "RelativeDocumentMoniker": "AuthenticationMAUI\\AuthenticationMAUI.FirebaseHostTemplate\\firebase.json",
+              "ToolTip": "V:\\MAUI Projects\\AuthenticationMAUI\\AuthenticationMAUI\\AuthenticationMAUI.FirebaseHostTemplate\\firebase.json",
+              "RelativeToolTip": "AuthenticationMAUI\\AuthenticationMAUI.FirebaseHostTemplate\\firebase.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-07-30T18:04:19.29Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "firebase.json",
+              "DocumentMoniker": "V:\\MAUI Projects\\AuthenticationMAUI\\AuthenticationMAUI\\AuthenticationMAUI.FirebaseHostTemplate\\\u041D\u043E\u0432\u0430\u044F \u043F\u0430\u043F\u043A\u0430\\firebase.json",
+              "RelativeDocumentMoniker": "AuthenticationMAUI\\AuthenticationMAUI.FirebaseHostTemplate\\\u041D\u043E\u0432\u0430\u044F \u043F\u0430\u043F\u043A\u0430\\firebase.json",
+              "ToolTip": "V:\\MAUI Projects\\AuthenticationMAUI\\AuthenticationMAUI\\AuthenticationMAUI.FirebaseHostTemplate\\\u041D\u043E\u0432\u0430\u044F \u043F\u0430\u043F\u043A\u0430\\firebase.json",
+              "RelativeToolTip": "AuthenticationMAUI\\AuthenticationMAUI.FirebaseHostTemplate\\\u041D\u043E\u0432\u0430\u044F \u043F\u0430\u043F\u043A\u0430\\firebase.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-07-30T18:04:02.436Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "RecaptchaService.cs",
+              "DocumentMoniker": "V:\\MAUI Projects\\AuthenticationMAUI\\AuthenticationMAUI\\Services\\LoginServices\\RecaptchaService.cs",
+              "RelativeDocumentMoniker": "AuthenticationMAUI\\Services\\LoginServices\\RecaptchaService.cs",
+              "ToolTip": "V:\\MAUI Projects\\AuthenticationMAUI\\AuthenticationMAUI\\Services\\LoginServices\\RecaptchaService.cs",
+              "RelativeToolTip": "AuthenticationMAUI\\Services\\LoginServices\\RecaptchaService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-28T21:52:33.776Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ILoginService.cs",
+              "DocumentMoniker": "V:\\MAUI Projects\\AuthenticationMAUI\\AuthenticationMAUI\\Interfaces\\ILoginService.cs",
+              "RelativeDocumentMoniker": "AuthenticationMAUI\\Interfaces\\ILoginService.cs",
+              "ToolTip": "V:\\MAUI Projects\\AuthenticationMAUI\\AuthenticationMAUI\\Interfaces\\ILoginService.cs",
+              "RelativeToolTip": "AuthenticationMAUI\\Interfaces\\ILoginService.cs",
+              "ViewState": "AgIAACAAAAAAAAAAAAAYwDcAAABkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-28T20:54:30.697Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "RecaptchaWebView.xaml.cs",
+              "DocumentMoniker": "V:\\MAUI Projects\\AuthenticationMAUI\\AuthenticationMAUI\\Pages\\RecaptchaWebView.xaml.cs",
+              "RelativeDocumentMoniker": "AuthenticationMAUI\\Pages\\RecaptchaWebView.xaml.cs",
+              "ToolTip": "V:\\MAUI Projects\\AuthenticationMAUI\\AuthenticationMAUI\\Pages\\RecaptchaWebView.xaml.cs",
+              "RelativeToolTip": "AuthenticationMAUI\\Pages\\RecaptchaWebView.xaml.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAA1wBgAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-28T20:38:10.137Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "RecaptchaWebView.xaml",
+              "DocumentMoniker": "V:\\MAUI Projects\\AuthenticationMAUI\\AuthenticationMAUI\\Pages\\RecaptchaWebView.xaml",
+              "RelativeDocumentMoniker": "AuthenticationMAUI\\Pages\\RecaptchaWebView.xaml",
+              "ToolTip": "V:\\MAUI Projects\\AuthenticationMAUI\\AuthenticationMAUI\\Pages\\RecaptchaWebView.xaml",
+              "RelativeToolTip": "AuthenticationMAUI\\Pages\\RecaptchaWebView.xaml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-07-28T20:36:24.932Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
               "Title": "FirebaseLoginService.cs",
               "DocumentMoniker": "V:\\MAUI Projects\\AuthenticationMAUI\\AuthenticationMAUI\\Services\\LoginServices\\FirebaseLoginService.cs",
               "RelativeDocumentMoniker": "AuthenticationMAUI\\Services\\LoginServices\\FirebaseLoginService.cs",
               "ToolTip": "V:\\MAUI Projects\\AuthenticationMAUI\\AuthenticationMAUI\\Services\\LoginServices\\FirebaseLoginService.cs",
               "RelativeToolTip": "AuthenticationMAUI\\Services\\LoginServices\\FirebaseLoginService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFQAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-06-27T23:23:03.526Z",
               "EditorCaption": ""

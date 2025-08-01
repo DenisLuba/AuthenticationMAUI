@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "5XPX/2IWEWk=",
+  "dgSpecHash": "615iZ8P043M=",
   "success": true,
   "projectFilePath": "V:\\MAUI Projects\\AuthenticationMAUI\\AuthenticationMAUI\\AuthenticationMAUI.csproj",
   "expectedPackageFiles": [
@@ -27,7 +27,7 @@
     "V:\\user\\.nuget\\packages\\microsoft.maui.graphics\\9.0.51\\microsoft.maui.graphics.9.0.51.nupkg.sha512",
     "V:\\user\\.nuget\\packages\\microsoft.maui.graphics.win2d.winui.desktop\\9.0.51\\microsoft.maui.graphics.win2d.winui.desktop.9.0.51.nupkg.sha512",
     "V:\\user\\.nuget\\packages\\microsoft.maui.resizetizer\\9.0.51\\microsoft.maui.resizetizer.9.0.51.nupkg.sha512",
-    "V:\\user\\.nuget\\packages\\microsoft.net.illink.tasks\\9.0.6\\microsoft.net.illink.tasks.9.0.6.nupkg.sha512",
+    "V:\\user\\.nuget\\packages\\microsoft.net.illink.tasks\\9.0.7\\microsoft.net.illink.tasks.9.0.7.nupkg.sha512",
     "V:\\user\\.nuget\\packages\\microsoft.web.webview2\\1.0.2903.40\\microsoft.web.webview2.1.0.2903.40.nupkg.sha512",
     "V:\\user\\.nuget\\packages\\microsoft.windows.sdk.buildtools\\10.0.22621.756\\microsoft.windows.sdk.buildtools.10.0.22621.756.nupkg.sha512",
     "V:\\user\\.nuget\\packages\\microsoft.windowsappsdk\\1.6.250205002\\microsoft.windowsappsdk.1.6.250205002.nupkg.sha512",

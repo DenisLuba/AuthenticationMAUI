@@ -77,6 +77,7 @@ V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-android\
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-android\AuthenticationMAUI.AssemblyInfo.cs
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-android\AuthenticationMAUI.csproj.CoreCompileInputs.cache
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-android\AuthenticationMAUI.sourcelink.json
+V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-android\XamlC.stamp
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-android\AuthenticationMAUI.dll
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-android\refint\AuthenticationMAUI.dll
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-android\AuthenticationMAUI.pdb

@@ -27,7 +27,16 @@
             <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
             <returns>В случае успеха возвращается true, иначе - false.</returns>
         </member>
-        <member name="M:AuthenticationMaui.Services.ILoginService.RequestVerificationCodeAsync(System.String,System.Int64)">
+        <member name="M:AuthenticationMaui.Services.ILoginService.VerifyRecaptchaTokenAsync(System.String,System.Int64)">
+            <summary>
+            Проверяет токен reCAPTCHA, отправленный с клиентского приложения, с помощью Google reCAPTCHA API.
+            </summary>
+            <param name="token">Это одноразовый код, который подтверждает, что пользователь прошёл проверку reCAPTCHA.</param>
+            <param name="timeoutMilliseconds"></param>
+            <returns>Максимальное время ожидания в миллисекундах для выполнения операции отправки кода.</returns>
+            <exception cref="T:System.InvalidOperationException">Если не был передан siteKey или secretKey.</exception>
+        </member>
+        <member name="M:AuthenticationMaui.Services.ILoginService.RequestVerificationCodeAsync(System.String,System.Int64,System.Boolean,Microsoft.Maui.Controls.Shell)">
             <summary>
             Отправляет запрос на генерацию и доставку проверочного кода на указанный номер телефона.
             </summary>
@@ -35,6 +44,8 @@
             Убедитесь, что указанный номер телефона действителен и правильно отформатирован.</remarks>
             <param name="phoneNumber">Номер телефона, на который будет отправлен проверочный код.</param>
             <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции отправки кода.</param>
+            <param name="isTest">Параметр, который указывает в каком режиме идет запрос проверочного кода: в тестовом или в продакшине.</param>
+            <param name="shell">Параметр типа <see cref="T:Microsoft.Maui.Controls.Shell"/></param>
             <returns>true, если запрос отправлен успешно, иначе - false</returns>
             <exception cref="T:System.Exception">Выбрасывается, если запрос завершился неудачей или ответ не содержит необходимой информации о сессии.</exception>
         </member>
@@ -129,7 +140,19 @@
             <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
             <returns>В случае успеха возвращается true, иначе - false.</returns>
         </member>
-        <member name="M:AuthenticationMaui.Services.FirebaseLoginService.RequestVerificationCodeAsync(System.String,System.Int64)">
+        <member name="M:AuthenticationMaui.Services.FirebaseLoginService.VerifyRecaptchaTokenAsync(System.String,System.Int64)">
+            <summary>
+            Проверяет токен reCAPTCHA, отправленный с клиентского приложения, с помощью Google reCAPTCHA API.
+            </summary>
+            <param name="token">Это одноразовый код, который: 
+            1) подтверждает, что пользователь прошёл проверку reCAPTCHA, 
+            2) валиден 2 минуты,
+            3) может быть проверен только 1 раз.</param>
+            <param name="timeoutMilliseconds"></param>
+            <returns>Максимальное время ожидания в миллисекундах для выполнения операции отправки кода.</returns>
+            <exception cref="T:System.InvalidOperationException">Если не был передан siteKey или secretKey.</exception>
+        </member>
+        <member name="M:AuthenticationMaui.Services.FirebaseLoginService.RequestVerificationCodeAsync(System.String,System.Int64,System.Boolean,Microsoft.Maui.Controls.Shell)">
             <summary>
             Отправляет запрос на генерацию и доставку проверочного кода на указанный номер телефона.
             </summary>
@@ -137,6 +160,8 @@
             Убедитесь, что указанный номер телефона действителен и правильно отформатирован.</remarks>
             <param name="phoneNumber">Номер телефона, на который будет отправлен проверочный код.</param>
             <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции отправки кода.</param>
+            <param name="isTest">Параметр, который указывает в каком режиме идет запрос проверочного кода: в тестовом или в продакшине.</param>
+            <param name="shell">Параметр типа <see cref="T:Microsoft.Maui.Controls.Shell"/></param>
             <returns>true, если запрос отправлен успешно, иначе - false</returns>
             <exception cref="T:System.Exception">Выбрасывается, если запрос завершился неудачей или ответ не содержит необходимой информации о сессии.</exception>
         </member>
@@ -144,7 +169,7 @@
             <summary>
             Авторизация с помощью проверочного кода, полученного на номер телефона.
             </summary>
-            <param name="code">Код, полученный пользователем в СМС.</param>
+            <param name="smsCode">Код, полученный пользователем в СМС.</param>
             <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
             <returns>true, если аутентификация прошла успешно, false - в противном случае.</returns>
             <exception cref="T:System.Exception">Выбрасывается, если запрос завершился неудачей или ответ не содержит необходимой информации о сессии.</exception>
@@ -242,14 +267,20 @@
             </code>
             </remarks>
         </member>
-        <member name="M:AuthenticationMaui.Services.FirebaseLoginService.CallWithTimeout(System.Func{System.Threading.Tasks.Task{System.Boolean}},System.Threading.CancellationToken)">
+        <member name="M:AuthenticationMaui.Services.FirebaseLoginService.CallWithTimeout``1(System.Func{System.Threading.Tasks.Task{``0}},System.Int64)">
             <summary>
             Выполняет асинхронную операцию с таймаутом.
             </summary>
-            <param name="asyncOperation">Асинхронная операция</param>
-            <param name="token">Токен сброса операции</param>
-            <returns><see cref="T:System.Threading.Tasks.Task"/> с результатом операции типа <see cref="T:System.Boolean"/></returns>
-            <exception cref="T:System.OperationCanceledException"></exception>
+            <param name="asyncOperation">Асинхронная операция.</param>
+            <param name="timeoutMilliseconds">Максимальное время выполнения операции.</param>
+            <returns><see cref="T:System.Threading.Tasks.Task"/> с результатом операции типа <see cref="T:System.Object"/></returns>
+            <exception cref="T:System.TimeoutException">Если операция не успела закончится в течение установленного времени.</exception>
+        </member>
+        <member name="M:AuthenticationMaui.Services.RecaptchaService.GetRecaptchaTokenAsync">
+            <summary>
+            Показывает страницу с reCAPTCHA и возвращает токен после прохождения теста.
+            </summary>
+            <returns>reCAPTCHA token или null, если пользователь прервал процесс или token не был получен.</returns>
         </member>
         <member name="M:AuthenticationMaui.Services.UserSecureStorageService.AddUserAsync(System.String,System.String)">
             <summary>

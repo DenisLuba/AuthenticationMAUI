@@ -5,14 +5,19 @@
     <title>Redirecting...</title>
 </head>
 <body>
-    <script>
-        const token = new URLSearchParams(location.hash.substring(1)).get('id_token');
-        const scheme = new URLSearchParams(location.search).get('scheme') || 'myapp';
+    <h1>REDIRECTING...</h1>
+    <pre id="output"></pre>
+    <script>      
+        const fragment = window.location.hash.substring(1); // в url после '#'
+        const params = new URLSearchParams(fragment);
+
+        const token = params.get('id_token');
+        const scheme = params.get('state') || 'myapp';
 
         if (token) {
             window.location.href = scheme + '://auth?id_token=' + token;
         } else {
-            document.body.innerHTML = '<h2>ID Token not found</h2>';
+            document.body.innerHTML = '<h2>Token not found</h2>';
         }
     </script>
 </body>

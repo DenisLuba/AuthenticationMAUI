@@ -21,3 +21,9 @@ build_property.CsWinRTAotWarningLevel =
 build_property.CsWinRTUseWindowsUIXamlProjections = false
 build_property.EffectiveAnalysisLevelStyle = 9.0
 build_property.EnableCodeStyleSeverity = 
+
+[V:/MAUI Projects/AuthenticationMAUI/AuthenticationMAUI/Pages/RecaptchaWebView.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = AuthenticationMAUI.Pages.RecaptchaWebView.xaml
+build_metadata.AdditionalFiles.TargetPath = Pages\RecaptchaWebView.xaml
+build_metadata.AdditionalFiles.RelativePath = Pages\RecaptchaWebView.xaml

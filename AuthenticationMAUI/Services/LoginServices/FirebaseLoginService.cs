@@ -20,6 +20,7 @@ public partial class FirebaseLoginService : ILoginService
         public string? GoogleClientId { get; set; }
         public string? GoogleRedirectUri { get; set; }
         public string? CallbackScheme { get; set; }
+        public string? SecretKey { get; set; }
     }
     #endregion
 
@@ -36,7 +37,7 @@ public partial class FirebaseLoginService : ILoginService
         public string IdToken { get; set; } = string.Empty;
     }
     #endregion
-
+    
     #region Private Variables
     private FirebaseAuthClient authClient;
     private IUserStorageService userStorageService;
@@ -46,6 +47,8 @@ public partial class FirebaseLoginService : ILoginService
     private string apiKey;
     private static readonly Lazy<HttpClient> httpClient = new();
     private static PhoneAuthSessionResult? sessionResult;
+    private string? secretKey;
+    private string? authDomain;
     #endregion
 
     #region Constructor
@@ -80,6 +83,10 @@ public partial class FirebaseLoginService : ILoginService
 
         var _callbackScheme = data.CallbackScheme ?? throw new ArgumentNullException(nameof(data.CallbackScheme), "Callback scheme cannot be null.");
         callbackScheme = _callbackScheme.EndsWith("://") ? _callbackScheme : $"{_callbackScheme}://"; // добавляем схему, если не указана
+
+        secretKey = data.SecretKey;
+        authDomain = data.AuthDomain?.Replace("http", "").Replace("https", "").Replace("://", "").Trim() ?? "";
+        authDomain = authDomain.EndsWith("/") ? authDomain.Replace("/", "") : authDomain;
     }
     #endregion
 
@@ -104,13 +111,13 @@ public partial class FirebaseLoginService : ILoginService
 
             if (!IsValidPassword(password))
                 throw new ArgumentException("Password is not valid.");
-            var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(timeoutMilliseconds));
+
             return await CallWithTimeout(async () =>
                 {
                     var userCredential = await authClient.SignInWithEmailAndPasswordAsync(email, password);
                     return !string.IsNullOrEmpty(userCredential?.User?.Info?.Email);
                 },
-                cts.Token);
+                timeoutMilliseconds);
         }
         catch (FirebaseAuthException ex)
         {
@@ -134,21 +141,27 @@ public partial class FirebaseLoginService : ILoginService
     {
         // WinUI не поддерживает WebAuthenticator.
         if (DeviceInfo.Platform == DevicePlatform.WinUI)
-            return false;
+            return await Task.FromResult(false);
 
         try
         {
-            var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(timeoutMilliseconds));
-
+#if WINDOWS
+        throw new NotSupportedException("Google login is not supported on Windows platform. Use LoginWithEmailAsync instead.");
+#else
             return await CallWithTimeout(async () =>
             {
+                var appScheme = callbackScheme[..(callbackScheme.Length - "://".Length)];
+
                 var startUri = new Uri(
                   "https://accounts.google.com/o/oauth2/v2/auth" +
                   $"?client_id={googleClientId}" +
-                  $"&redirect_uri={googleRedirectUri}" +
+                  $"&redirect_uri={Uri.EscapeDataString(googleRedirectUri)}" +
                   "&response_type=id_token" +
                   "&scope=openid%20email%20profile" +
-                  $"&nonce={Guid.NewGuid()}");
+                  $"&nonce={Guid.NewGuid()}" +
+                  $"&state={appScheme}");
+
+                Trace.WriteLine(startUri);
 
                 var endUri = new Uri($"{callbackScheme}");
 
@@ -163,14 +176,15 @@ public partial class FirebaseLoginService : ILoginService
 
                 return !string.IsNullOrEmpty(result?.User?.Info?.Email);
             },
-            cts.Token);
+            timeoutMilliseconds);
+#endif
         }
         catch (Exception ex)
         {
             throw new Exception($"Google Login failed: {ex.Message}", ex);
         }
     }
-    #endregion
+#endregion
 
     #region LoginWithFacebookAsync Method
     /// <summary>
@@ -185,6 +199,46 @@ public partial class FirebaseLoginService : ILoginService
     }
     #endregion
 
+    #region VerifyRecaptchaTokenAsync Method
+    /// <summary>
+    /// Проверяет токен reCAPTCHA, отправленный с клиентского приложения, с помощью Google reCAPTCHA API.
+    /// </summary>
+    /// <param name="token">Это одноразовый код, который: 
+    /// 1) подтверждает, что пользователь прошёл проверку reCAPTCHA, 
+    /// 2) валиден 2 минуты,
+    /// 3) может быть проверен только 1 раз.</param>
+    /// <param name="timeoutMilliseconds"></param>
+    /// <returns>Максимальное время ожидания в миллисекундах для выполнения операции отправки кода.</returns>
+    /// <exception cref="InvalidOperationException">Если не был передан siteKey или secretKey.</exception>
+    public async Task<bool> VerifyRecaptchaTokenAsync(string token, long timeoutMilliseconds)
+    {
+        if (string.IsNullOrWhiteSpace(secretKey))
+            throw new InvalidOperationException("SiteKey and SecretKey must be set for reCAPTCHA verification.");
+
+        const string verifyUrl = "https://www.google.com/recaptcha/api/siteverify";
+        var values = new Dictionary<string, string>
+        {
+            { "secret", secretKey },
+            { "response", token }
+        };
+
+        using var content = new FormUrlEncodedContent(values);
+
+        return await CallWithTimeout(async () =>
+        {
+            var response = await httpClient.Value.PostAsync(verifyUrl, content).ConfigureAwait(false);
+            var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            // Лог для отладки
+            Trace.WriteLine($"reCAPTCHA verification response: {json}");
+
+            using var doc = JsonDocument.Parse(json);
+            return doc.RootElement.TryGetProperty("success", out var successProperty) && successProperty.GetBoolean();
+        },
+        timeoutMilliseconds);
+    }
+    #endregion
+
     #region RequestVerificationCodeAsync Method
     /// <summary>
     /// Отправляет запрос на генерацию и доставку проверочного кода на указанный номер телефона.
@@ -193,18 +247,30 @@ public partial class FirebaseLoginService : ILoginService
     /// Убедитесь, что указанный номер телефона действителен и правильно отформатирован.</remarks>
     /// <param name="phoneNumber">Номер телефона, на который будет отправлен проверочный код.</param>
     /// <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции отправки кода.</param>
+    /// <param name="isTest">Параметр, который указывает в каком режиме идет запрос проверочного кода: в тестовом или в продакшине.</param>
+    /// <param name="shell">Параметр типа <see cref="Shell"/></param>
     /// <returns>true, если запрос отправлен успешно, иначе - false</returns>
     /// <exception cref="Exception">Выбрасывается, если запрос завершился неудачей или ответ не содержит необходимой информации о сессии.</exception>
-    public async Task<bool> RequestVerificationCodeAsync(string phoneNumber, long timeoutMilliseconds)
+    public async Task<bool> RequestVerificationCodeAsync(string phoneNumber, long timeoutMilliseconds, bool isTest, Shell? shell = null)
     {
         var normalizedPhoneNumber = NormalizePhoneNumber(phoneNumber);
         if (!IsValidPhoneNumber(normalizedPhoneNumber))
             throw new ArgumentException("Phone number is not valid. It should be in E.164 format, e.g., +1234567890.");
 
+        string token = "test";
+
+        if (!isTest)
+        {
+            if (shell is null) throw new ArgumentNullException("Shell is null in the FirebaseLoginService.RequestVerificationCodeAsync Method");
+            var htmlSource = $"https://{authDomain}/recaptcha.html";
+            token = await new RecaptchaService(this, shell, htmlSource, timeoutMilliseconds).GetRecaptchaTokenAsync()
+                ?? throw new Exception("token is null in the FirebaseLoginService.RequestVerificationCodeAsync Method");
+        }
+
         var request = new
         {
             phoneNumber = normalizedPhoneNumber,
-            recaptchaToken = "test"
+            recaptchaToken = token
         };
 
         using var requestMessage = new HttpRequestMessage(
@@ -214,26 +280,20 @@ public partial class FirebaseLoginService : ILoginService
             Content = JsonContent.Create(request)
         };
 
-        var sendTask = httpClient.Value.SendAsync(requestMessage);
-        var timeoutTask = Task.Delay(TimeSpan.FromMilliseconds(timeoutMilliseconds));
+        return await CallWithTimeout(async () =>
+        {
+            using var response = await httpClient.Value.SendAsync(requestMessage).ConfigureAwait(false);
 
-        var completedTask = await Task.WhenAny(sendTask, timeoutTask);
+            var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-        if (completedTask == timeoutTask)
-            throw new TimeoutException("The operation timed out while waiting for Firebase response.");
+            if (!response.IsSuccessStatusCode)
+                throw new Exception($"Phone auth code request failed: {json}");
 
-        using var response = await sendTask.ConfigureAwait(false);
-        var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-        //Log
-        Trace.WriteLine(json);
-
-        if (!response.IsSuccessStatusCode)
-            throw new Exception($"Phone auth code request failed: {json}");
-
-        var result = JsonSerializer.Deserialize<PhoneCodeResponse>(json);
-        sessionResult = new PhoneAuthSessionResult { SessionInfo = result?.SessionInfo ?? throw new Exception("Missing sessionInfo") };
-        return !string.IsNullOrWhiteSpace(sessionResult.SessionInfo );
+            var result = JsonSerializer.Deserialize<PhoneCodeResponse>(json);
+            sessionResult = new PhoneAuthSessionResult { SessionInfo = result?.SessionInfo ?? throw new Exception("Missing sessionInfo") };
+            return !string.IsNullOrWhiteSpace(sessionResult.SessionInfo);
+        },
+        timeoutMilliseconds);
     }
     #endregion
 
@@ -241,16 +301,16 @@ public partial class FirebaseLoginService : ILoginService
     /// <summary>
     /// Авторизация с помощью проверочного кода, полученного на номер телефона.
     /// </summary>
-    /// <param name="code">Код, полученный пользователем в СМС.</param>
+    /// <param name="smsCode">Код, полученный пользователем в СМС.</param>
     /// <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
     /// <returns>true, если аутентификация прошла успешно, false - в противном случае.</returns>
     /// <exception cref="Exception">Выбрасывается, если запрос завершился неудачей или ответ не содержит необходимой информации о сессии.</exception>
-    public async Task<bool> LoginWithVerificationCodeAsync(string code, long timeoutMilliseconds)
+    public async Task<bool> LoginWithVerificationCodeAsync(string smsCode, long timeoutMilliseconds)
     {
         var request = new
         {
             sessionInfo = sessionResult?.SessionInfo,
-            code = code
+            code = smsCode
         };
 
         using var requestMessage = new HttpRequestMessage(
@@ -260,26 +320,18 @@ public partial class FirebaseLoginService : ILoginService
             Content = JsonContent.Create(request)
         };
 
-        var sendTask = httpClient.Value.SendAsync(requestMessage);
-        var timeoutTask = Task.Delay(TimeSpan.FromMilliseconds(timeoutMilliseconds));
+        return await CallWithTimeout(async () =>
+        {
+            using var response = await httpClient.Value.SendAsync(requestMessage).ConfigureAwait(false);
+            var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-        var completedTask = await Task.WhenAny(sendTask, timeoutTask);
+            if (!response.IsSuccessStatusCode)
+                throw new Exception($"Phone auth login failed: {json}");
 
-        if (completedTask == timeoutTask)
-            throw new TimeoutException("The operation timed out while waiting for Firebase response.");
-
-        using var response = await sendTask.ConfigureAwait(false);
-
-        var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-        //Log
-        Trace.WriteLine(json);
-
-        if (!response.IsSuccessStatusCode)
-            throw new Exception($"Phone auth login failed: {json}");
-
-        var result = JsonSerializer.Deserialize<PhoneLoginResponse>(json);
-        return !string.IsNullOrEmpty(result?.IdToken);
+            var result = JsonSerializer.Deserialize<PhoneLoginResponse>(json);
+            return !string.IsNullOrEmpty(result?.IdToken);
+        },
+        timeoutMilliseconds);
     }
     #endregion
 
@@ -324,14 +376,12 @@ public partial class FirebaseLoginService : ILoginService
             if (!await userStorageService.LoginExistsAsync(login))
                 await userStorageService.AddUserAsync(login, email);
 
-            var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(timeoutMilliseconds));
-
-            return await CallWithTimeout(async() =>
+            return await CallWithTimeout(async () =>
                 {
                     var registrationResult = await authClient.CreateUserWithEmailAndPasswordAsync(email, password, login);
                     return !string.IsNullOrEmpty(registrationResult?.User?.Info?.Email);
-                }, 
-                cts.Token);
+                },
+                timeoutMilliseconds);
         }
         catch (FirebaseAuthException ex)
         {
@@ -361,14 +411,12 @@ public partial class FirebaseLoginService : ILoginService
                 : await userStorageService.GetEmailByLoginAsync(loginOrEmail)
                     ?? throw new Exception("Login not found in the IUserStorageService.");
 
-            var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(timeoutMilliseconds));
-
             _ = await CallWithTimeout(async () =>
                 {
                     await authClient.ResetEmailPasswordAsync(loginOrEmail);
                     return true; // Возвращаем true, если сброс пароля прошел успешно
                 },
-                cts.Token);
+                timeoutMilliseconds);
 
             // очистка хранилища
             userStorageService.RemoveUserAsync(loginOrEmail);
@@ -461,19 +509,19 @@ public partial class FirebaseLoginService : ILoginService
     /// <summary>
     /// Выполняет асинхронную операцию с таймаутом.
     /// </summary>
-    /// <param name="asyncOperation">Асинхронная операция</param>
-    /// <param name="token">Токен сброса операции</param>
-    /// <returns><see cref="Task"/> с результатом операции типа <see cref="bool"/></returns>
-    /// <exception cref="OperationCanceledException"></exception>
-    private async Task<bool> CallWithTimeout(Func<Task<bool>> asyncOperation, CancellationToken token)
+    /// <param name="asyncOperation">Асинхронная операция.</param>
+    /// <param name="timeoutMilliseconds">Максимальное время выполнения операции.</param>
+    /// <returns><see cref="Task"/> с результатом операции типа <see cref="object"/></returns>
+    /// <exception cref="TimeoutException">Если операция не успела закончится в течение установленного времени.</exception>
+    private async static Task<T> CallWithTimeout<T>(Func<Task<T>> asyncOperation, long timeoutMilliseconds)
     {
         var task = asyncOperation();
-        var cancelTask = Task.Delay(Timeout.Infinite, token);
+        var cancelTask = Task.Delay(TimeSpan.FromMilliseconds(timeoutMilliseconds));
 
         var completed = await Task.WhenAny(task, cancelTask);
 
         if (completed == cancelTask)
-            throw new OperationCanceledException(token); // отмена операции
+            throw new TimeoutException("The operation was cancelled."); // отмена операции
 
         return await task; // Нормальное завершение задачи 
     }

@@ -31,6 +31,17 @@ public interface ILoginService
     Task<bool> LoginWithFacebookAsync(long timeoutMilliseconds);
     #endregion
 
+    #region VerifyRecaptchaTokenAsync Method
+    /// <summary>
+    /// Проверяет токен reCAPTCHA, отправленный с клиентского приложения, с помощью Google reCAPTCHA API.
+    /// </summary>
+    /// <param name="token">Это одноразовый код, который подтверждает, что пользователь прошёл проверку reCAPTCHA.</param>
+    /// <param name="timeoutMilliseconds"></param>
+    /// <returns>Максимальное время ожидания в миллисекундах для выполнения операции отправки кода.</returns>
+    /// <exception cref="InvalidOperationException">Если не был передан siteKey или secretKey.</exception>
+    Task<bool> VerifyRecaptchaTokenAsync(string token, long timeoutMilliseconds);
+    #endregion
+
     #region RequestVerificationCodeAsync Method
     /// <summary>
     /// Отправляет запрос на генерацию и доставку проверочного кода на указанный номер телефона.
@@ -39,9 +50,11 @@ public interface ILoginService
     /// Убедитесь, что указанный номер телефона действителен и правильно отформатирован.</remarks>
     /// <param name="phoneNumber">Номер телефона, на который будет отправлен проверочный код.</param>
     /// <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции отправки кода.</param>
+    /// <param name="isTest">Параметр, который указывает в каком режиме идет запрос проверочного кода: в тестовом или в продакшине.</param>
+    /// <param name="shell">Параметр типа <see cref="Shell"/></param>
     /// <returns>true, если запрос отправлен успешно, иначе - false</returns>
     /// <exception cref="Exception">Выбрасывается, если запрос завершился неудачей или ответ не содержит необходимой информации о сессии.</exception>
-    Task<bool> RequestVerificationCodeAsync(string phoneNumber, long timeoutMilliseconds);
+    Task<bool> RequestVerificationCodeAsync(string phoneNumber, long timeoutMilliseconds, bool isTest, Shell? shell);
     #endregion
 
     #region LoginWithVerificationCodeAsync Method
