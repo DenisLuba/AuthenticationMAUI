@@ -45,7 +45,7 @@ This template uses FirebaseAuthentication.net and WebAuthenticator. It provides:
 6. Click on the [link](https://www.google.com/recaptcha/admin/create)
 7. Add some kind of label (it doesn't matter which one)
 8. reCAPTCHA type: Using tasks (v2) - "I am not a robot" checkbox
-9. Add a domain from Firebase (**Authentication > Settings > Authorized Domains**) — usually `project-id.firebaseapp.com `
+9. Add a domain from Firebase (**Authentication > Settings > Authorized Domains**) — usually `project-id.firebaseapp.com`
 10. Select the appropriate project.
 11. Click "Send"
 12. Save the Site Key and Secret Key
