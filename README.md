@@ -71,7 +71,7 @@ firebase init hosting
 ```
 
 4. Answer the questions from firebase:
-`bash
+```bash
 1. Are you ready to proceed? Y
 2. Please select an option:
 - Add Firebase to an existring Google Cloud Platform project
