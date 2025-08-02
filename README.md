@@ -463,7 +463,7 @@ Ce modèle peut être réutilisé pour un nombre illimité de projets MAUI avec 
 
 ### 1. Создание Firebase-проекта
 
-1. Перейди в (https://console.firebase.google.com)
+1. Перейди в [Firebase](https://console.firebase.google.com)
 2. Создай проект (например, `myapp-auth`)
 3. Включи Authentication > Sign-in method > Google (для аутентификации через Google)
 4. Запомни значения:
@@ -482,17 +482,25 @@ Ce modèle peut être réutilisé pour un nombre illimité de projets MAUI avec 
 
 ### 3. Создай ключ reCAPTCHA для аутентификации по СМС с reCAPTCHA
 
-1. Открой Google Cloud Console > Security > reCAPTCHA и создай reCAPTCHA v2, или перейди по ссылке https://www.google.com/recaptcha/admin/create
-2. Добавь какой-нибудь ярлык (не важно какой)
-3. Тип reCAPTCHA: С помощью заданий (v2) - Флажок "Я не робот"
-4. Добавь домен из Firebase (**Authentication > Settings > Authorized Domains**) — обычно `project-id.firebaseapp.com`
-5. Выбери соответствующий проект
-6. Нажми "Отправить"
-7. Сохрани Site Key и Secret Key
+1. Открой [Google Cloud Console > Security > reCAPTCHA](https://console.cloud.google.com/security/recaptcha) и создай ключ
+2. Application Type - Web
+3. Add a domain - (**Firebase Project > Authentication > Settings > Authorized Domains**) — обычно `project-id.firebaseapp.com `
+4. Next Step > Will you use challenges - Да > Checkbox challenge
+5. Create Key > Save the Site Key ([reCAPTCHA](https://console.cloud.google.com/security/recaptcha) > reCAPTCHA Keys > ID of yours key) и Secret Key ([reCAPTCHA](https://console.cloud.google.com/security/recaptcha) > reCAPTCHA Keys > Key details > (Continue with the instructions) Use legacy key)
+
+ИЛИ
+
+1. Нажмите на [ссылку](https://www.google.com/recaptcha/admin/create)
+2. Добавьте какой-нибудь ярлык (неважно, какой именно)
+3. reCAPTCHA type: С помощью заданий (v2) - Флажок "I am not a robot" 
+4. Добавьте домен из Firebase (Authentication > Settings > Authorized Domains) — обычно project-id.firebaseapp.com
+5. Выберите подходящий проект
+6. Нажмите "Отправить"
+7. Сохраните ключ сайта и секретный ключ
 
 ### 4. Настрой firebase hosting
 
-1. Установи, если не установлен, `firebase-tools` через терминал [View → Terminal], находясь в корневой директории проекта (вначале скачай и установи Node.js: https://nodejs.org/en/download/current):
+1. Установи, если не установлен, `firebase-tools` через терминал [View → Terminal], находясь в корневой директории проекта (вначале скачай и установи [Node.js](https://nodejs.org/en/download/current)):
 
 ```bash
 npm install -g firebase-tools
@@ -660,7 +668,7 @@ public class WebAuthenticationCallbackActivity : Microsoft.Maui.Authentication.W
 
 ---
 
-Успешно! Теперь этот шаблон можно переиспользовать в сотне проектов MAUI с Firebase Hosting!
+Успешно! Теперь этот шаблон можно переиспользовать в сотне проектов MAUI с Firebase Hosting!🔁
 
 # Zh (AI翻译)
 # 用于 .NET MAUI 的 Firebase Google 身份验证
