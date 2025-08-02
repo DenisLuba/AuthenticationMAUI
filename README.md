@@ -6,54 +6,64 @@
 
 This template uses FirebaseAuthentication.net and WebAuthenticator. It provides:
 
-* Firebase Hosting (`redirect.html`)
-* `AuthenticationMAUI` library for Google Login in .NET MAUI apps. It also implements Email authentication in Firebase
+* Firebase Hosting (`redirect.html `)
+* and the 'AuthenticationMAUI` library, which connects Google Login in the MAUI application. It also implements authentication via Email in Firebase and via SMS by phone number (THIS IS A PAID SERVICE currently available in the Blaze tariff) with reCAPTCHA.
 
 ---
 
-## Step-by-step Setup
+## Step by step
 
-### 1. Create a Firebase Project
+### 1. Creating a Firebase project
 
-1. Go to (https://console.firebase.google.com)
-2. Create a project (e.g., `myapp-auth`)
-3. Enable `Authentication > Sign-in method > Google`
-4. Note the values:
+1. Go to (https://console .firebase.google.com)
+2. Create a project (for example, `myapp-auth')
+3. Enable Authentication > Sign-in method > Google (for authentication via Google)
+4. Remember the values:
+* Web API Key (**Project Settings > General > Web API Key**) (for authentication via Google)
+* Auth domain (**Authentication > Settings > Authorized Domains**) — usually `project-id.firebaseapp.com `
+5. Enable Authentication > Sign-in method > Phone (for authentication via CMC)
 
-   * Web API Key (**Project Settings > General > Web API Key**)
-   * Auth domain (**Authentication > Settings > Authorized Domains**) — usually `project-id.firebaseapp.com`
+### 2. Creating an OAuth 2.0 Client ID for authentication via Google
 
-### 2. Create OAuth 2.0 Client ID
-
-1. Open [Google Cloud Console > API & Services > Credentials](https://console.cloud.google.com/apis/credentials)
-2. If you haven't created one yet, create an `OAuth 2.0 Client ID`:
+1. Open [Google Cloud Console > API & Services > Credentials](https://console.cloud .google.com/apis/credentials)
+2. Create, if not already created, an `OAuth 2.0 Client ID`:
 
    * Type: Web Application
    * Authorized redirect URIs: `https://project-id.firebaseapp.com/redirect.html`
-3. Copy your `client_id` (in the same place or in Firebase Console > Authentication > Sign-in method > Google > Web SDK configuration > Web client ID)
+3. Remember the `client_id' (in the same place or in the Firebase Console > Authentication > Sign-in method > Google > Web SDK configuration > Web client ID)
 
-### 3. Setup Firebase Hosting
+### 3. Create a reCAPTCHA key for SMS authentication with reCAPTCHA
 
-1. If not installed, install `firebase-tools' via the terminal [View → Terminal], located in the root directory of the project (first download and install Node.js: https://nodejs.org/en/download/current):
+1. Open Google Cloud Console > Security > reCAPTCHA and create reCAPTCHA v2, or click on the link https://www.google.com/recaptcha/admin/create
+2. Add some kind of label (it doesn't matter which one)
+3. reCAPTCHA type: Using tasks (v2) - "I am not a robot" checkbox
+4. Add a domain from Firebase (**Authentication > Settings > Authorized Domains**) — usually `project-id.firebaseapp.com `
+5. Select the appropriate project.
+6. Click "Send"
+7. Save the Site Key and Secret Key
+
+###4. Setting up firebase hosting
+
+1. Install, if not installed, `firebase-tools` via the terminal [View → Terminal], located in the root directory of the project (first download and install Node.js: https://nodejs.org/en/download/current):
 
 ```bash
 npm install -g firebase-tools
 ```
 
-2. Log in:
+2. Enter:
 
 ```bash
 firebase login
 ```
 
-3. Initialize hosting (use your project ID):
+3. Initialize hosting (take the project name from Firebase):
 
 ```bash
 firebase init hosting
 ```
 
-4. Answer questions from firebase:
-5. ```bash
+4. Answer the questions from firebase:
+`bash
 1. Are you ready to proceed? Y
 2. Please select an option:
 - Add Firebase to an existring Google Cloud Platform project
@@ -63,9 +73,9 @@ firebase init hosting
 6. Set up authomatic builds and deploys with GitHub? N
 ```
 
-### 4. Create a file `redirect.html`
+### 5. Create a file redirect.html (for authentication via Google)
 
-In `public/redirect.html`:
+`public/redirect.html`:
 
 ```html
 <script>
@@ -79,7 +89,7 @@ In `public/redirect.html`:
 </script>
 ```
 
-### 5. Edit the file `firebase.json`
+###6. Change the firebase file.json (for authentication via Google)
 
 ```json
 {
@@ -97,7 +107,36 @@ In `public/redirect.html`:
 }
 ```
 
-### 6. Deploy
+### 7. Create a file recaptcha.html (for SMS authentication with reCAPTCHA)
+
+`public/redirect.html`:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>reCAPTCHA</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script>
+        function onSubmit(token) {
+            window.location.href = "recaptcha://token?" + encodeURIComponent(token);
+        }
+    </script>
+</head>
+<body>
+    <h3>Checking reCAPTCHA</h3>
+<form action="?" method="POST">
+        <div class="g-recaptcha"
+             data-sitekey="**__YOUR_SITE_KEY__**"
+             data-callback="onSubmit">
+        </div>
+    </form>
+</body>
+</html>
+``
+Replace "**__YOUR_SITE_KEY__**" with the public key (site key) from step 3.7.
+
+###8. Deployment
 
 ```bash
 firebase deploy --only hosting
@@ -105,7 +144,7 @@ firebase deploy --only hosting
 
 ---
 
-### 🔗 Add to your MAUI project
+### 9. 🔗 Adding to an existing MAUI project
 
 1. Clone the repository:
 
@@ -113,14 +152,14 @@ firebase deploy --only hosting
 git clone https://github.com/DenisLuba/AuthenticationMAUI.git
 ```
 
-2. In Visual Studio: Right click on solution → `Add > Existing Project...` → select `AuthenticationMAUI.csproj`
-3. Then: Right click on your MAUI project → `Add > Project Reference...` → select `AuthenticationMAUI`
+2. In Visual Studio: PCM on solution → `Add > Existing Project...` → select `AuthenticationMAUI.csproj`
+3. Then: PCM on the MAUI project → `Add > Project Reference...` → mark `AuthenticationMAUI`
 
 ---
 
-## 🌐 Using `FirebaseLoginService`
+### 10. 🌐 How to use FirebaseLoginService
 
-1. Register `FirebaseLoginData` with DI:
+1. Send FirebaseLoginData via DI to MauiProgram.cs:
 
 ```csharp
 builder.Services.AddSingleton<IUserStorageService, UserSecureStorageService>();
@@ -131,18 +170,19 @@ builder.Services.AddSingleton<ILoginService>(provider =>
         new ()
         {
             UserStorageService = userStorageService,
-            ApiKey = apiKey, // Your Web API Key from Firebase Console (Firebase Console > Project Settings > General > "Web API Key")
-            AuthDomain = authDomain, // Usualy it is your-project-id.firebaseapp.com (Firebase Console > Authentication > Settings > "Authorized domains")
-            GoogleClientId = googleClientId, // Your Google Client ID (Firebase Console > Authentication > Sign-in method > Google > Web SDK configuration > "Web client ID")
-            GoogleRedirectUri = googleRedirectUri, // Usualy it is "https://your-project-id.firebaseapp.com/__/auth/handler", but we are changing "__/auth/handler" to "redirect.html",
-                                                   // so that it turns out "https://your-project-id.firebaseapp.com/redirect.html"
+            ApiKey = apiKey, // Your Web API Key from the Firebase Console (Firebase Console > Project Settings > General > "Web API Key")
+AuthDomain = authDomain, // Usually this your-project-id.firebaseapp.com (Firebase Console > Authentication > Settings > "Authorized domains")
+GoogleClientId = googleClientId, // Your Google Client ID (Firebase Console > Authentication > Sign-in method > Google > Web SDK configuration > "Web client ID")
+            GoogleRedirectUri = googleRedirectUri, // Usually it is "https://your-project-id.firebaseapp.com/__/auth/handler ", but "__/auth/handler" is changed to "redirect.html ",
+// to make it work "https://your-project-id.firebaseapp.com/redirect.html "
                                                    // (Google Cloud Console > APIs & Services > Credentials > Auth 2.0 Client IDs > Web client (auto created by Google Service) > Authorized redirect URIs)
-            CallbackScheme = callbackScheme // A callback scheme for Google authentication. For example, "myapp" for myapp:// (but you can also use myapp:// - this will be edited in the constructor)
-        });
+            CallbackScheme = callbackScheme, // A callback scheme for authentication via Google. For example, "myapp" for myapp:// (but you can also use myapp:// - this will be edited in the constructor)
+SecretKey = SecretKey // Your Secret Key for reCAPTCHA from step 3.7
+});
 });
 ```
 
-2. Add the intent filter for Android `MainActivity.cs`, for example, below the MainActivity class in the same file:
+2. To authenticate via Google, add the intent-filter for Android to `MainActivity.cs`, for example, you can add it below the MainActivity class in the same file:
 
 ```csharp
 [Activity(NoHistory = true, LaunchMode = LaunchMode.SingleTop, Exported = true)]
@@ -152,11 +192,11 @@ builder.Services.AddSingleton<ILoginService>(provider =>
     DataScheme = CALLBACK_SCHEME)]
 public class WebAuthenticationCallbackActivity : Microsoft.Maui.Authentication.WebAuthenticatorCallbackActivity
 {
-    private const string CALLBACK_SCHEME = "myapp"; // Must match the Callback Scheme (passed to FirebaseLoginService)
+private const string CALLBACK_SCHEME = "myapp"; // Must match the callback scheme of CallbackScheme (passed to FirebaseLoginService)
 }
-```
+``
 
-3. Add to `Info.plist` (iOS):
+3. Add to Info.plist (for iOS):
 
 ```xml
 <key>CFBundleURLTypes</key>
@@ -172,7 +212,7 @@ public class WebAuthenticationCallbackActivity : Microsoft.Maui.Authentication.W
 
 ---
 
-This template is reusable for any number of MAUI projects with Firebase Hosting 🔁
+Successfully! Now this template can be reused in hundreds of MAUI projects with Firebase Hosting!🔁
 
 # Fr (Traduit par ai)
 
