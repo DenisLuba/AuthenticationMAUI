@@ -1,0 +1,21 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>reCAPTCHA</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script>
+        function onSubmit(token) {
+            window.location.href = "recaptcha://token?" + encodeURIComponent(token);
+        }
+    </script>
+</head>
+<body>
+    <h3>Проверка reCAPTCHA</h3>
+    <form action="?" method="POST">
+        <div class="g-recaptcha"
+             data-sitekey="**__YOUR_SITE_KEY__**"
+             data-callback="onSubmit">
+        </div>
+    </form>
+</body>
+</html>

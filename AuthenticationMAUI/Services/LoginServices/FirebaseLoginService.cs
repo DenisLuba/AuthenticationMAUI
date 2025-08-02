@@ -62,6 +62,7 @@ public partial class FirebaseLoginService : ILoginService
     /// string GoogleClientId - Ваш Google Client ID (Firebase Console > Authentication > Sign-in method > Google > Web SDK configuration > "Web client ID");
     /// string GoogleRedirectUri - Обычно это https://your-project-id.firebaseapp.com/__/auth/handler (Google Cloud Console > APIs & Services > Credentials > Auth 2.0 Client IDs > Web client (auto created by Google Service) > Authorized redirect URIs)</param>
     /// string CallbackScheme - Схема обратного вызова для аутентификации через Google. Например, "todolist" для todolist://.
+    /// string SecretKey - Ваш Secret Key для reCAPTCHA (Google Cloud Console > Security > reCAPTCHA > reCAPTCHA v2 > Site key and secret key).
     public FirebaseLoginService(FirebaseLoginData data)
     {
         var authConfig = new FirebaseAuthConfig

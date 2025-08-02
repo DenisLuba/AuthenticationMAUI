@@ -1,4 +1,5 @@
 using AuthenticationMaui.Services;
+using System.Diagnostics;
 using System.Web;
 
 namespace AuthenticationMAUI.Pages;
@@ -27,11 +28,14 @@ public partial class RecaptchaWebView : ContentPage
 
     private async void RecaptchaWebView_Navigating(object? sender, WebNavigatingEventArgs e)
     {
+        // log
+        Trace.WriteLine(e.Url.ToString());
+
         if (e.Url.StartsWith("recaptcha://token?"))
         {
             // ќбработаем пользовательскую схему URL -адреса
             e.Cancel = true; // ќтменим навигацию, чтобы предотвратить навигацию WebView на URL
-            
+
             var token = HttpUtility.UrlDecode(e.Url["recaptcha://token?".Length..]); // »звлечем токен из URL
             // то же самое, что 
             // var token = e.Url.Substring("recaptcha://token?".Length);
@@ -44,7 +48,7 @@ public partial class RecaptchaWebView : ContentPage
                 return;
             }
 
-            bool isVerified = await _loginService.VerifyRecaptchaTokenAsync(token, _timeout); 
+            bool isVerified = await _loginService.VerifyRecaptchaTokenAsync(token, _timeout);
 
             if (!isVerified)
             {
@@ -55,7 +59,9 @@ public partial class RecaptchaWebView : ContentPage
 
             RecaptchaVerifiedEvent?.Invoke(this, token); // ¬ызываем событие с токеном, если проверка прошла успешно
         }
-        else 
-            RecaptchaVerifiedEvent?.Invoke(this, null); // ¬ызываем событие с null, если проверка не прошла
+        else
+            return; // ≈сли URL не начинаетс€ с "recaptcha://token?",
+                    // то ничего не делаем, просто возвращаемс€ и ждем следующего событи€ навигации
+                    // с перенаправлением на recaptcha://token?token=...
     }
 }
