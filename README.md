@@ -360,7 +360,7 @@ Ce modèle peut être réutilisé pour un nombre illimité de projets MAUI avec 
 Этот шаблон использует FirebaseAuthentication.net и WebAuthenticator. Он обеспечивает:
 
 * Firebase Hosting (`redirect.html`)
-* и библиотеку `AuthenticationMAUI`, которая подключает Google Login в MAUI-приложении. Также в ней реализована аутентификация через Email в Firebase
+* и библиотеку `AuthenticationMAUI`, которая подключает Google Login в MAUI-приложении. Также в ней реализована аутентификация через Email в Firebase и через СМС по номеру телефона (ЭТО ПЛАТНАЯ УСЛУГА, доступная на данный момент в тарифе Blaze) с прохождением reCAPTCHA.
 
 ---
 
@@ -370,13 +370,13 @@ Ce modèle peut être réutilisé pour un nombre illimité de projets MAUI avec 
 
 1. Перейди в (https://console.firebase.google.com)
 2. Создай проект (например, `myapp-auth`)
-3. Включи Authentication > Sign-in method > Google
+3. Включи Authentication > Sign-in method > Google (для аутентификации через Google)
 4. Запомни значения:
-
-   * Web API Key (**Project Settings > General > Web API Key**)
+   * Web API Key (**Project Settings > General > Web API Key**) (для аутентификации через Google)
    * Auth domain (**Authentication > Settings > Authorized Domains**) — обычно `project-id.firebaseapp.com`
+5. Включи Authentication > Sign-in method > Phone (для аутентификации через CMC)
 
-### 2. Создание OAuth 2.0 Client ID
+### 2. Создание OAuth 2.0 Client ID для аутентификации через Google
 
 1. Открой [Google Cloud Console > API & Services > Credentials](https://console.cloud.google.com/apis/credentials)
 2. Создай, если еще не создан, `OAuth 2.0 Client ID`:
@@ -385,7 +385,17 @@ Ce modèle peut être réutilisé pour un nombre illimité de projets MAUI avec 
    * Authorized redirect URIs: `https://project-id.firebaseapp.com/redirect.html`
 3. Запомни `client_id` (там же или в Firebase Console > Authentication > Sign-in method > Google > Web SDK configuration > Web client ID)
 
-### 3. Настрой firebase hosting
+### 3. Создай ключ reCAPTCHA для аутентификации по СМС с reCAPTCHA
+
+1. Открой Google Cloud Console > Security > reCAPTCHA и создай reCAPTCHA v2, или перейди по ссылке https://www.google.com/recaptcha/admin/create
+2. Добавь какой-нибудь ярлык (не важно какой)
+3. Тип reCAPTCHA: С помощью заданий (v2) - Флажок "Я не робот"
+4. Добавь домен из Firebase (**Authentication > Settings > Authorized Domains**) — обычно `project-id.firebaseapp.com`
+5. Выбери соответствующий проект
+6. Нажми "Отправить"
+7. Сохрани Site Key и Secret Key
+
+### 4. Настрой firebase hosting
 
 1. Установи, если не установлен, `firebase-tools` через терминал [View → Terminal], находясь в корневой директории проекта (вначале скачай и установи Node.js: https://nodejs.org/en/download/current):
 
@@ -416,7 +426,7 @@ firebase init hosting
 6. Set up authomatic builds and deploys with GitHub? N
 ```
 
-### 4. Создай файл redirect.html
+### 5. Создай файл redirect.html (для аутентификации через Google)
 
 `public/redirect.html`:
 
@@ -432,7 +442,7 @@ firebase init hosting
 </script>
 ```
 
-### 5. Измени файл firebase.json
+### 6. Измени файл firebase.json (для аутентификации через Google)
 
 ```json
 {
@@ -450,7 +460,36 @@ firebase init hosting
 }
 ```
 
-### 6. Деплой
+### 7. Создай файл recaptcha.html (для аутентификации по СМС с reCAPTCHA)
+
+`public/redirect.html`:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>reCAPTCHA</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script>
+        function onSubmit(token) {
+            window.location.href = "recaptcha://token?" + encodeURIComponent(token);
+        }
+    </script>
+</head>
+<body>
+    <h3>Проверка reCAPTCHA</h3>
+    <form action="?" method="POST">
+        <div class="g-recaptcha"
+             data-sitekey="**__YOUR_SITE_KEY__**"
+             data-callback="onSubmit">
+        </div>
+    </form>
+</body>
+</html>
+```
+Замени "**__YOUR_SITE_KEY__**" на публичный ключ (site key) из шага 3.7.
+
+### 8. Деплой
 
 ```bash
 firebase deploy --only hosting
@@ -458,7 +497,7 @@ firebase deploy --only hosting
 
 ---
 
-### 🔗 Добавление в существующий MAUI проект
+### 9. 🔗 Добавление в существующий MAUI проект
 
 1. Клонируй репозиторий:
 
@@ -471,7 +510,7 @@ git clone https://github.com/DenisLuba/AuthenticationMAUI.git
 
 ---
 
-## 🌐 Как использовать FirebaseLoginService
+### 10. 🌐 Как использовать FirebaseLoginService
 
 1. Передай FirebaseLoginData через DI в MauiProgram.cs:
 
@@ -490,12 +529,13 @@ builder.Services.AddSingleton<ILoginService>(provider =>
             GoogleRedirectUri = googleRedirectUri, // Обычно это "https://your-project-id.firebaseapp.com/__/auth/handler", но "__/auth/handler" меняем на "redirect.html",
                                                    // чтобы получилось "https://your-project-id.firebaseapp.com/redirect.html"
                                                    // (Google Cloud Console > APIs & Services > Credentials > Auth 2.0 Client IDs > Web client (auto created by Google Service) > Authorized redirect URIs)
-            CallbackScheme = callbackScheme // Схема обратного вызова для аутентификации через Google. Например, "myapp" для myapp:// (но можно и myapp:// - это будет отредактировано в конструкторе)
+            CallbackScheme = callbackScheme, // Схема обратного вызова для аутентификации через Google. Например, "myapp" для myapp:// (но можно и myapp:// - это будет отредактировано в конструкторе)
+            SecretKey = secretKey // Ваш Secret Key для reCAPTCHA из шага 3.7
         });
 });
 ```
 
-2. Добавь intent-filter для Android `MainActivity.cs`, например, ниже класса MainActivity в том же файле:
+2. Для аутентификации через Google добавь intent-filter для Android в `MainActivity.cs`, например, можешь добавить его ниже класса MainActivity в том же файле:
 
 ```csharp
 [Activity(NoHistory = true, LaunchMode = LaunchMode.SingleTop, Exported = true)]
