@@ -15,7 +15,7 @@ This template uses FirebaseAuthentication.net and WebAuthenticator. It provides:
 
 ### 1. Creating a Firebase project
 
-1. Go to (https://console .firebase.google.com)
+1. Go to (https://console.firebase.google.com)
 2. Create a project (for example, `myapp-auth')
 3. Enable Authentication > Sign-in method > Google (for authentication via Google)
 4. Remember the values:
@@ -25,7 +25,7 @@ This template uses FirebaseAuthentication.net and WebAuthenticator. It provides:
 
 ### 2. Creating an OAuth 2.0 Client ID for authentication via Google
 
-1. Open [Google Cloud Console > API & Services > Credentials](https://console.cloud .google.com/apis/credentials)
+1. Open [Google Cloud Console > API & Services > Credentials](https://console.cloud.google.com/apis/credentials)
 2. Create, if not already created, an `OAuth 2.0 Client ID`:
 
    * Type: Web Application
@@ -34,7 +34,7 @@ This template uses FirebaseAuthentication.net and WebAuthenticator. It provides:
 
 ### 3. Create a reCAPTCHA key for SMS authentication with reCAPTCHA
 
-1. Open Google Cloud Console > Security > reCAPTCHA and create reCAPTCHA v2, or click on the link https://www.google.com/recaptcha/admin/create
+1. Open [Google Cloud Console > Security > reCAPTCHA](https://console.cloud.google.com/security/recaptcha) and create reCAPTCHA v2, or click on the link https://www.google.com/recaptcha/admin/create
 2. Add some kind of label (it doesn't matter which one)
 3. reCAPTCHA type: Using tasks (v2) - "I am not a robot" checkbox
 4. Add a domain from Firebase (**Authentication > Settings > Authorized Domains**) — usually `project-id.firebaseapp.com `
@@ -44,7 +44,7 @@ This template uses FirebaseAuthentication.net and WebAuthenticator. It provides:
 
 ###4. Setting up firebase hosting
 
-1. Install, if not installed, `firebase-tools` via the terminal [View → Terminal], located in the root directory of the project (first download and install Node.js: https://nodejs.org/en/download/current):
+1. Install, if not installed, `firebase-tools` via the terminal [View → Terminal], located in the root directory of the project (first download and install [Node.js](https://nodejs.org/en/download/current)):
 
 ```bash
 npm install -g firebase-tools
