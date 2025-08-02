@@ -15,7 +15,7 @@ This template uses FirebaseAuthentication.net and WebAuthenticator. It provides:
 
 ### 1. Creating a Firebase project
 
-1. Go to (https://console.firebase.google.com)
+1. Go to [Firebase](https://console.firebase.google.com)
 2. Create a project (for example, `myapp-auth')
 3. Enable Authentication > Sign-in method > Google (for authentication via Google)
 4. Remember the values:
@@ -34,13 +34,21 @@ This template uses FirebaseAuthentication.net and WebAuthenticator. It provides:
 
 ### 3. Create a reCAPTCHA key for SMS authentication with reCAPTCHA
 
-1. Open [Google Cloud Console > Security > reCAPTCHA](https://console.cloud.google.com/security/recaptcha) and create reCAPTCHA v2, or click on the link https://www.google.com/recaptcha/admin/create
-2. Add some kind of label (it doesn't matter which one)
-3. reCAPTCHA type: Using tasks (v2) - "I am not a robot" checkbox
-4. Add a domain from Firebase (**Authentication > Settings > Authorized Domains**) — usually `project-id.firebaseapp.com `
-5. Select the appropriate project.
-6. Click "Send"
-7. Save the Site Key and Secret Key
+1. Open [Google Cloud Console > Security > reCAPTCHA](https://console.cloud.google.com/security/recaptcha) and create key
+2. Application Type - Web
+3. Add a domain - (**Authentication > Settings > Authorized Domains**) — usually `project-id.firebaseapp.com `
+4. Next Step > Will you use challenges - Yes > Checkbox challenge
+5. Create Key > Save the Site Key ([reCAPTCHA](https://console.cloud.google.com/security/recaptcha) > reCAPTCHA Keys > ID of yours key) and Secret Key ([reCAPTCHA](https://console.cloud.google.com/security/recaptcha) > reCAPTCHA Keys > Key details > (Continue with the instructions) Use legacy key)
+
+   OR
+   
+6. Click on the [link](https://www.google.com/recaptcha/admin/create)
+7. Add some kind of label (it doesn't matter which one)
+8. reCAPTCHA type: Using tasks (v2) - "I am not a robot" checkbox
+9. Add a domain from Firebase (**Authentication > Settings > Authorized Domains**) — usually `project-id.firebaseapp.com `
+10. Select the appropriate project.
+11. Click "Send"
+12. Save the Site Key and Secret Key
 
 ###4. Setting up firebase hosting
 
