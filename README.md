@@ -40,17 +40,17 @@ This template uses FirebaseAuthentication.net and WebAuthenticator. It provides:
 4. Next Step > Will you use challenges - Yes > Checkbox challenge
 5. Create Key > Save the Site Key ([reCAPTCHA](https://console.cloud.google.com/security/recaptcha) > reCAPTCHA Keys > ID of yours key) and Secret Key ([reCAPTCHA](https://console.cloud.google.com/security/recaptcha) > reCAPTCHA Keys > Key details > (Continue with the instructions) Use legacy key)
 
-   OR
-   
-6. Click on the [link](https://www.google.com/recaptcha/admin/create)
-7. Add some kind of label (it doesn't matter which one)
-8. reCAPTCHA type: Using tasks (v2) - "I am not a robot" checkbox
-9. Add a domain from Firebase (**Authentication > Settings > Authorized Domains**) — usually `project-id.firebaseapp.com`
-10. Select the appropriate project.
-11. Click "Send"
-12. Save the Site Key and Secret Key
+OR
 
-###4. Setting up firebase hosting
+1. Click on the link
+2. Add some kind of label (it doesn't matter which one)
+3. reCAPTCHA type: Using tasks (v2) - "I am not a robot" checkbox
+4. Add a domain from Firebase (Authentication > Settings > Authorized Domains) — usually project-id.firebaseapp.com
+5. Select the appropriate project
+6. Click "Send"
+7. Save the Site Key and Secret Key
+
+### 4. Setting up firebase hosting
 
 1. Install, if not installed, `firebase-tools` via the terminal [View → Terminal], located in the root directory of the project (first download and install [Node.js](https://nodejs.org/en/download/current)):
 
