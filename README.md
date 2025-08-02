@@ -202,7 +202,7 @@ public class WebAuthenticationCallbackActivity : Microsoft.Maui.Authentication.W
 {
 private const string CALLBACK_SCHEME = "myapp"; // Must match the callback scheme of CallbackScheme (passed to FirebaseLoginService)
 }
-``
+```
 
 3. Add to Info.plist (for iOS):
 
