@@ -16,12 +16,12 @@ This template uses FirebaseAuthentication.net and WebAuthenticator. It provides:
 ### 1. Creating a Firebase project
 
 1. Go to [Firebase](https://console.firebase.google.com)
-2. Create a project (for example, `myapp-auth')
+2. Create a project (for example, `myapp-auth`)
 3. Enable Authentication > Sign-in method > Google (for authentication via Google)
 4. Remember the values:
 * Web API Key (**Project Settings > General > Web API Key**) (for authentication via Google)
 * Auth domain (**Authentication > Settings > Authorized Domains**) — usually `project-id.firebaseapp.com `
-5. Enable Authentication > Sign-in method > Phone (for authentication via CMC)
+5. Enable Authentication > Sign-in method > Phone (for authentication via Phone)
 
 ### 2. Creating an OAuth 2.0 Client ID for authentication via Google
 
@@ -32,7 +32,7 @@ This template uses FirebaseAuthentication.net and WebAuthenticator. It provides:
    * Authorized redirect URIs: `https://project-id.firebaseapp.com/redirect.html`
 3. Remember the `client_id' (in the same place or in the Firebase Console > Authentication > Sign-in method > Google > Web SDK configuration > Web client ID)
 
-### 3. Create a reCAPTCHA key for SMS authentication with reCAPTCHA
+### 3. Create a reCAPTCHA key for Phone authentication with reCAPTCHA
 
 1. Open [Google Cloud Console > Security > reCAPTCHA](https://console.cloud.google.com/security/recaptcha) and create key
 2. Application Type - Web
@@ -42,7 +42,7 @@ This template uses FirebaseAuthentication.net and WebAuthenticator. It provides:
 
 OR
 
-1. Click on the link
+1. Click on the [link](https://www.google.com/recaptcha/admin/create)
 2. Add some kind of label (it doesn't matter which one)
 3. reCAPTCHA type: Using tasks (v2) - "I am not a robot" checkbox
 4. Add a domain from Firebase (Authentication > Settings > Authorized Domains) — usually project-id.firebaseapp.com
@@ -97,7 +97,7 @@ firebase init hosting
 </script>
 ```
 
-###6. Change the firebase file.json (for authentication via Google)
+### 6. Change the firebase.json file (for authentication via Google)
 
 ```json
 {
@@ -141,10 +141,10 @@ firebase init hosting
     </form>
 </body>
 </html>
-``
+```
 Replace "**__YOUR_SITE_KEY__**" with the public key (site key) from step 3.7.
 
-###8. Deployment
+### 8. Deployment
 
 ```bash
 firebase deploy --only hosting
@@ -185,7 +185,7 @@ GoogleClientId = googleClientId, // Your Google Client ID (Firebase Console > Au
 // to make it work "https://your-project-id.firebaseapp.com/redirect.html "
                                                    // (Google Cloud Console > APIs & Services > Credentials > Auth 2.0 Client IDs > Web client (auto created by Google Service) > Authorized redirect URIs)
             CallbackScheme = callbackScheme, // A callback scheme for authentication via Google. For example, "myapp" for myapp:// (but you can also use myapp:// - this will be edited in the constructor)
-SecretKey = SecretKey // Your Secret Key for reCAPTCHA from step 3.7
+            SecretKey = SecretKey // Your Secret Key for reCAPTCHA from step 3.7
 });
 });
 ```
@@ -231,32 +231,50 @@ Successfully! Now this template can be reused in hundreds of MAUI projects with 
 Ce modèle utilise FirebaseAuthentication.net et WebAuthenticator. Il fournit :
 
 * Firebase Hosting (`redirect.html`)
-* La bibliothèque `AuthenticationMAUI` pour la connexion Google dans les applications .NET MAUI. Elle implémente également l’authentification par e-mail via Firebase.
+* et la bibliothèque 'AuthenticationMAUI', qui connecte Google Login dans l'application MAUI. Il implémente également l'authentification par e-mail dans Firebase et par SMS par numéro de téléphone (IL S'AGIT d'UN SERVICE PAYANT actuellement disponible dans le tarif Blaze) avec reCAPTCHA.
 
 ---
 
 ## Configuration étape par étape
 
-### 1. Créer un projet Firebase
+### 1. Création d'un projet Firebase
 
-1. Accédez à [https://console.firebase.google.com](https://console.firebase.google.com)
+1. Aller à [Firebase](https://console.firebase.google.com)
 2. Créez un projet (par exemple, `myapp-auth`)
-3. Activez `Authentication > Sign-in method > Google`
-4. Notez les valeurs suivantes :
+3. Activer Authentication > Sign-in method > Google (pour l'authentification via Google)
+4. Rappelez-vous les valeurs:
+* Web API Key (**Project Settings > General > Web API Key**) (pour l'authentification via Google)
+* Auth domain (**Authentication > Settings > Authorized Domains**) - généralement `project-id.firebaseapp.com `
+5. Activer Authentication > Sign-in method > Phone (pour l'authentification par Téléphone)
 
-   * Clé API Web (**Paramètres du projet > Général > Clé API Web**)
-   * Domaine d’authentification (**Authentication > Paramètres > Domaines autorisés**) — généralement `project-id.firebaseapp.com`
+### 2. Création d'un ID client OAuth 2.0 pour l'authentification via Google
 
-### 2. Créer un identifiant client OAuth 2.0
-
-1. Ouvrez [Google Cloud Console > API & Services > Identifiants](https://console.cloud.google.com/apis/credentials)
+1. Ouvrez [Google Cloud Console > API & Services > Credentials](https://console.cloud.google.com/apis/credentials)
 2. Si vous n’en avez pas encore créé, créez un `identifiant client OAuth 2.0` :
 
-   * Type : Application Web
-   * URI de redirection autorisé : `https://project-id.firebaseapp.com/redirect.html`
+   * Type: Web Application
+   * Authorized redirect URIs: `https://project-id.firebaseapp.com/redirect.html`
 3. Copiez votre `client_id` (au même endroit ou dans Firebase Console > Authentication > Sign-in method > Google > Web SDK configuration > Web client ID)
 
-### 3. Configurer Firebase Hosting
+### 3. Créer une clé reCAPTCHA pour l'authentification par Téléphone avec reCAPTCHA
+
+1. Ouvrez [Google Cloud Console > Security > reCAPTCHA](https://console.cloud.google.com/security/recaptcha) et créer une clé
+2. Application Type - Web
+3. Add a domain - (**Firebase Project > Authentication > Settings > Authorized Domains**) - généralement `project-id.firebaseapp.com`
+4. Next Step > Will you use challenges - Yes > Checkbox challenge
+5. Create Key > Save the Site Key ([reCAPTCHA](https://console.cloud.google.com/security/recaptcha) > reCAPTCHA Keys > ID of yours key) et Secret Key ([reCAPTCHA](https://console.cloud.google.com/security/recaptcha) > reCAPTCHA Keys > Key details > (Continue with the instructions) Use legacy key)
+
+OU
+
+1. Cliquez sur le [lien](https://www.google.com/recaptcha/admin/create)
+2. Ajoutez une sorte d'étiquette (peu importe laquelle)
+3. reCAPTCHA type: Using tasks (v2) - "I am not a robot" checkbox
+4. Ajouter un domaine à partir de Firebase (Authentication > Settings > Authorized Domains) - généralement project-id.firebaseapp.com
+5. Sélectionnez le projet approprié
+6. Cliquez sur "Send"
+7. Enregistrez Site Key et Secret Key
+
+### 4. Configurer Firebase Hosting
 
 1. Si ce n’est pas déjà fait, installez `firebase-tools` via le terminal [Affichage → Terminal], à la racine du projet (commencez par installer Node.js : https://nodejs.org/en/download/current) :
 
@@ -287,7 +305,7 @@ firebase init hosting
 6. Configurer des builds et déploiements automatiques avec GitHub ? N
 ```
 
-### 4. Créer un fichier `redirect.html`
+### 5. Créer un fichier `redirect.html` (pour l'authentification via Google)
 
 Dans `public/redirect.html` :
 
@@ -303,7 +321,7 @@ Dans `public/redirect.html` :
 </script>
 ```
 
-### 5. Modifier le fichier `firebase.json`
+### 6. Modifier le fichier `firebase.json` (pour l'authentification via Google)
 
 ```json
 {
@@ -321,7 +339,35 @@ Dans `public/redirect.html` :
 }
 ```
 
-### 6. Déployer
+### 7. Créez un fichier recaptcha.html (pour l'authentification par SMS avec reCAPTCHA)
+`public/redirect.html`:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>reCAPTCHA</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script>
+        function onSubmit(token) {
+            window.location.href = "recaptcha://token?" + encodeURIComponent(token);
+        }
+    </script>
+</head>
+<body>
+    <h3>Checking reCAPTCHA</h3>
+<form action="?" method="POST">
+        <div class="g-recaptcha"
+             data-sitekey="**__YOUR_SITE_KEY__**"
+             data-callback="onSubmit">
+        </div>
+    </form>
+</body>
+</html>
+```
+Remplacez "**__YOUR_SITE_KEY__**" par la clé publique (site key) de l'étape 3.7.
+
+### 8. Déployer
 
 ```bash
 firebase deploy --only hosting
@@ -329,7 +375,7 @@ firebase deploy --only hosting
 
 ---
 
-### 🔗 Ajouter à votre projet MAUI
+### 9. 🔗 Ajouter à votre projet MAUI
 
 1. Clonez le dépôt :
 
@@ -343,7 +389,7 @@ git clone https://github.com/DenisLuba/AuthenticationMAUI.git
 
 ---
 
-## 🌐 Utiliser `FirebaseLoginService`
+### 10. 🌐 Utiliser `FirebaseLoginService`
 
 1. Enregistrez `FirebaseLoginData` dans le conteneur DI :
 
@@ -362,7 +408,8 @@ builder.Services.AddSingleton<ILoginService>(provider =>
             GoogleRedirectUri = googleRedirectUri, // Généralement "https://your-project-id.firebaseapp.com/__/auth/handler", mais ici on le change en "redirect.html"
                                                    // Cela devient donc "https://your-project-id.firebaseapp.com/redirect.html"
                                                    // (Google Cloud Console > APIs & Services > Credentials > OAuth 2.0 Client IDs > Client Web > URIs de redirection autorisés)
-            CallbackScheme = callbackScheme // Le schéma de rappel utilisé pour l’authentification Google. Par exemple, "myapp" pour myapp://
+            CallbackScheme = callbackScheme, // Le schéma de rappel utilisé pour l’authentification Google. Par exemple, "myapp" pour myapp://
+            SecretKey = SecretKey / / Votre clé secrète pour reCAPTCHA à partir de l'étape 3.7
         });
 });
 ```
