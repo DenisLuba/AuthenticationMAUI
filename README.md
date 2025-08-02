@@ -36,7 +36,7 @@ This template uses FirebaseAuthentication.net and WebAuthenticator. It provides:
 
 1. Open [Google Cloud Console > Security > reCAPTCHA](https://console.cloud.google.com/security/recaptcha) and create key
 2. Application Type - Web
-3. Add a domain - (**Authentication > Settings > Authorized Domains**) — usually `project-id.firebaseapp.com `
+3. Add a domain - (**Firebase Project > Authentication > Settings > Authorized Domains**) — usually `project-id.firebaseapp.com `
 4. Next Step > Will you use challenges - Yes > Checkbox challenge
 5. Create Key > Save the Site Key ([reCAPTCHA](https://console.cloud.google.com/security/recaptcha) > reCAPTCHA Keys > ID of yours key) and Secret Key ([reCAPTCHA](https://console.cloud.google.com/security/recaptcha) > reCAPTCHA Keys > Key details > (Continue with the instructions) Use legacy key)
 
