@@ -5,6 +5,10 @@
     {
       "AbsoluteMoniker": "D:0:0:{FBC3048B-5A1D-48FA-BF93-BEEE537DC66C}|AuthenticationMAUI\\AuthenticationMAUI.csproj|v:\\maui projects\\authenticationmaui\\authenticationmaui\\services\\loginservices\\firebaseloginservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{FBC3048B-5A1D-48FA-BF93-BEEE537DC66C}|AuthenticationMAUI\\AuthenticationMAUI.csproj|solutionrelative:authenticationmaui\\services\\loginservices\\firebaseloginservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FBC3048B-5A1D-48FA-BF93-BEEE537DC66C}|AuthenticationMAUI\\AuthenticationMAUI.csproj|v:\\maui projects\\authenticationmaui\\authenticationmaui\\authenticationmaui.firebasehosttemplate\\public\\recaptcha.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{FBC3048B-5A1D-48FA-BF93-BEEE537DC66C}|AuthenticationMAUI\\AuthenticationMAUI.csproj|solutionrelative:authenticationmaui\\authenticationmaui.firebasehosttemplate\\public\\recaptcha.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,7 +18,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 8,
           "Children": [
             {
               "$type": "Bookmark",
@@ -46,13 +50,26 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "recaptcha.html",
+              "DocumentMoniker": "V:\\MAUI Projects\\AuthenticationMAUI\\AuthenticationMAUI\\AuthenticationMAUI.FirebaseHostTemplate\\public\\recaptcha.html",
+              "RelativeDocumentMoniker": "AuthenticationMAUI\\AuthenticationMAUI.FirebaseHostTemplate\\public\\recaptcha.html",
+              "ToolTip": "V:\\MAUI Projects\\AuthenticationMAUI\\AuthenticationMAUI\\AuthenticationMAUI.FirebaseHostTemplate\\public\\recaptcha.html",
+              "RelativeToolTip": "AuthenticationMAUI\\AuthenticationMAUI.FirebaseHostTemplate\\public\\recaptcha.html",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2025-08-02T21:38:31.479Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
               "Title": "FirebaseLoginService.cs",
               "DocumentMoniker": "V:\\MAUI Projects\\AuthenticationMAUI\\AuthenticationMAUI\\Services\\LoginServices\\FirebaseLoginService.cs",
               "RelativeDocumentMoniker": "AuthenticationMAUI\\Services\\LoginServices\\FirebaseLoginService.cs",
               "ToolTip": "V:\\MAUI Projects\\AuthenticationMAUI\\AuthenticationMAUI\\Services\\LoginServices\\FirebaseLoginService.cs",
               "RelativeToolTip": "AuthenticationMAUI\\Services\\LoginServices\\FirebaseLoginService.cs",
-              "ViewState": "AgIAABQAAAAAAAAAAAAzwBkAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAABcAAAAAAAAAAAAAAEAAAAC3AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-06-27T23:23:03.526Z",
               "EditorCaption": ""
