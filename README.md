@@ -115,7 +115,7 @@ firebase init hosting
 }
 ```
 
-### 7. Create a file recaptcha.html (for SMS authentication with reCAPTCHA)
+### 7. Create a file recaptcha.html (for the Phone authentication with reCAPTCHA)
 
 `public/redirect.html`:
 
@@ -185,7 +185,7 @@ GoogleClientId = googleClientId, // Your Google Client ID (Firebase Console > Au
 // to make it work "https://your-project-id.firebaseapp.com/redirect.html "
                                                    // (Google Cloud Console > APIs & Services > Credentials > Auth 2.0 Client IDs > Web client (auto created by Google Service) > Authorized redirect URIs)
             CallbackScheme = callbackScheme, // A callback scheme for authentication via Google. For example, "myapp" for myapp:// (but you can also use myapp:// - this will be edited in the constructor)
-            SecretKey = SecretKey // Your Secret Key for reCAPTCHA from step 3.7
+            SecretKey = secretKey // Your Secret Key for reCAPTCHA from step 3.7
 });
 });
 ```
@@ -671,40 +671,58 @@ public class WebAuthenticationCallbackActivity : Microsoft.Maui.Authentication.W
 Успешно! Теперь этот шаблон можно переиспользовать в сотне проектов MAUI с Firebase Hosting!🔁
 
 # Zh (AI翻译)
-# 用于 .NET MAUI 的 Firebase Google 身份验证
-## ✅ 概览
-该模板使用 FirebaseAuthentication.net 和 WebAuthenticator，提供以下功能：
+#Firebase Google Auth for.NET MAUI
 
-* Firebase 托管 (`redirect.html`)
+## ✅ 概述
 
-* `AuthenticationMAUI` 库，用于 .NET MAUI 应用中的 Google 登录。它还实现了 Firebase 的电子邮件身份验证功能。
+此模板使用FirebaseAuthentication.net 和WebAuthenticator。 它提供:
 
-## 分步设置指南
-### 1. 创建 Firebase 项目
-1. 访问 https://console.firebase.google.com
+*Firebase托管（`redirect.html`)
+*和'AuthenticationMAUI'库，它在毛伊岛应用程序中连接Google登录。 它还通过Firebase中的电子邮件和通过电话号码的短信（这是目前在Blaze资费中提供的付费服务）与reCAPTCHA实现身份验证。
 
-2. 创建一个项目（例如：`myapp-auth`）
+---
 
-3. 启用 `Authentication > Sign-in method > Google`
+##循序渐进
 
-4. 记录以下值：
+### 1. 创建Firebase项目
 
-* Web API 密钥（**Project Settings > General > Web API Key**）
+1. 转到[Firebase](https://console.firebase.google.com)
+2. 创建一个项目（例如，`myapp-auth`）
+3. 启用Authentication > Sign-in method > Google（用于通过Google进行身份验证）
+4. 记住价值观:
+* Web API Key (Project Settings > General > Web API Key)（用于通过Google进行身份验证）
+* Auth domain (Authentication > Settings > Authorized Domains) — 通常`project-id.firebaseapp.com `
+5. 启用**身份验证>登录方法>电话**（用于电话身份验证）
 
-* 认证域名（**Authentication > Settings > Authorized Domains**）— 通常是 `project-id.firebaseapp.com`
+### 2. 通过Google创建用于身份验证的OAuth2.0客户端ID
 
-### 2. 创建 OAuth 2.0 客户端 ID
-1. 打开 [**Google Cloud Console > API 与服务 > 凭据**](https://console.cloud.google.com/apis/credentials)
+1. 打开[Google Cloud Console > API & Services > Credentials](https://console.cloud.google.com/apis/credentials)
+2. 创建（如果尚未创建）`OAuth 2.0 Client ID`:
+`OAuth 2.0 Client ID`:
 
-2. 如果尚未创建，请创建一个 `OAuth 2.0 Client ID`：
+   * Type: Web Application
+   * Authorized redirect URIs: `https://project-id.firebaseapp.com/redirect.html`
+3. 记住'client_id'（在同一个地方或**Firebase Console > Authentication > Sign-in method > Google > Web SDK configuration > Web client ID**）
 
-* 类型：Web 应用
+### 3. 使用reCAPTCHA创建用于SMS身份验证的reCAPTCHA密钥
 
-* 授权重定向 URI：`https://project-id.firebaseapp.com/redirect.html`
+1. 打开[Google Cloud Console > Security > reCAPTCHA](https://console.cloud.google.com/security/recaptcha) 并创建密钥
+2. Application Type - Web
+3. Add a domain - (Firebase Project > Authentication > Settings > Authorized Domains) -通常`project-id.firebaseapp.com`
+4. Next Step > Will you use challenges - 是 > Checkbox challenge
+5. Create Key > Save the Site Key ([reCAPTCHA](https://console.cloud.google.com/security/recaptcha) > reCAPTCHA Keys > ID of yours key) 和 Secret Key ([reCAPTCHA](https://console.cloud.google.com/security/recaptcha) > reCAPTCHA Keys > Key details > (Continue with the instructions) Use legacy key)
 
-3. 复制你的 c`lient_id`（在相同页面，或 **Firebase 控制台 > Authentication > Sign-in method > Google > Web SDK 配置 > Web client ID**）
+或
 
-### 3. 设置 Firebase Hosting
+1. 点击[ссылку](https://www.google.com/recaptcha/admin/create)
+2. 添加某种标签（哪一个并不重要）
+3. reCAPTCHA类型：使用作业（v2）-复选框"我不是机器人" 
+4. 从Firebase添加域(Authentication > Settings > Authorized Domains) -通常project-id.firebaseapp.com
+5. 选择合适的项目
+6. 点击"发送"
+7. 保存网站密钥和密钥
+
+### 4. 设置 Firebase Hosting
 1. 如果尚未安装，在项目根目录通过终端安装 firebase-tools（首先需要安装 Node.js：https://nodejs.org/en/download/current）：
 
 ```bash
@@ -734,7 +752,7 @@ firebase init hosting
 6. Set up authomatic builds and deploys with GitHub? N
 ```
 
-### 4. 创建文件 `redirect.html`
+### 5. 创建文件 `redirect.html`（用于通过Google进行身份验证）
 
 放置于 `public/redirect.html`：
 
@@ -750,7 +768,7 @@ firebase init hosting
 </script>
 ```
 
-### 5. 编辑文件 firebase.json
+### 6. 编辑文件 firebase.json （用于通过Google进行身份验证）
 
 ```json
 {
@@ -768,7 +786,35 @@ firebase init hosting
 }
 ```
 
-### 6.部署
+### 7. 创建一个文件 recaptch.html（用于使用reCAPTCHA进行电话身份验证）
+`public/redirect.html`:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>reCAPTCHA</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script>
+        function onSubmit(token) {
+            window.location.href = "recaptcha://token?" + encodeURIComponent(token);
+        }
+    </script>
+</head>
+<body>
+    <h3>Checking reCAPTCHA</h3>
+<form action="?" method="POST">
+        <div class="g-recaptcha"
+             data-sitekey="**__YOUR_SITE_KEY__**"
+             data-callback="onSubmit">
+        </div>
+    </form>
+</body>
+</html>
+```
+将"**__YOUR_SITE_KEY__**"替换为步骤3.7中的公钥（site key）
+
+### 8.部署
 
 ```bash
 firebase deploy --only hosting
@@ -807,7 +853,8 @@ builder.Services.AddSingleton<ILoginService>(provider =>
             GoogleRedirectUri = googleRedirectUri, // 通常为 "https://your-project-id.firebaseapp.com/__/auth/handler"，但我们将 "__/auth/handler" 替换为 "redirect.html"，即
                                                    // "https://your-project-id.firebaseapp.com/redirect.html"
                                                    // （Google Cloud Console > APIs & Services > Credentials > Auth 2.0 Client IDs > Web client > Authorized redirect URIs）
-            CallbackScheme = callbackScheme // Google 登录回调的 scheme。例如 "myapp" 对应 myapp://（可以自定义）
+            CallbackScheme = callbackScheme, // Google 登录回调的 scheme。例如 "myapp" 对应 myapp://（可以自定义）
+            SecretKey = secretKey // 步骤3.7中的reCAPTCHA密钥
         });
 });
 ```
