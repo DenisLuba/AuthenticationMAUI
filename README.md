@@ -9,6 +9,7 @@ This template uses FirebaseAuthentication.net and WebAuthenticator. It provides:
 * Firebase Hosting (`redirect.html `)
 * and the 'AuthenticationMAUI` library, which connects Google Login in the MAUI application. It also implements authentication via Email in Firebase and via SMS by phone number (THIS IS A PAID SERVICE currently available in the Blaze tariff) with reCAPTCHA.
 
+For an example of hosting on Firebase, see the "AuthenticationMAUI.FirebaseHostTemplate" folder
 ---
 
 ## Step by step
@@ -233,6 +234,7 @@ Ce modèle utilise FirebaseAuthentication.net et WebAuthenticator. Il fournit :
 * Firebase Hosting (`redirect.html`)
 * et la bibliothèque 'AuthenticationMAUI', qui connecte Google Login dans l'application MAUI. Il implémente également l'authentification par e-mail dans Firebase et par SMS par numéro de téléphone (IL S'AGIT d'UN SERVICE PAYANT actuellement disponible dans le tarif Blaze) avec reCAPTCHA.
 
+Pour un exemple d'hébergement sur Firebase, voir le dossier "AuthenticationMAUI.FirebaseHostTemplate"
 ---
 
 ## Configuration étape par étape
@@ -457,6 +459,7 @@ Ce modèle peut être réutilisé pour un nombre illimité de projets MAUI avec 
 * Firebase Hosting (`redirect.html`)
 * и библиотеку `AuthenticationMAUI`, которая подключает Google Login в MAUI-приложении. Также в ней реализована аутентификация через Email в Firebase и через СМС по номеру телефона (ЭТО ПЛАТНАЯ УСЛУГА, доступная на данный момент в тарифе Blaze) с прохождением reCAPTCHA.
 
+Пример хостинга на Firebase смотри в папке "AuthenticationMAUI.FirebaseHostTemplate"
 ---
 
 ## Пошагово
@@ -680,6 +683,7 @@ public class WebAuthenticationCallbackActivity : Microsoft.Maui.Authentication.W
 *Firebase托管（`redirect.html`)
 *和'AuthenticationMAUI'库，它在毛伊岛应用程序中连接Google登录。 它还通过Firebase中的电子邮件和通过电话号码的短信（这是目前在Blaze资费中提供的付费服务）与reCAPTCHA实现身份验证。
 
+有关在Firebase上托管的示例，请参阅AuthenticationMAUI.FirebaseHostTemplate文件夹
 ---
 
 ##循序渐进
