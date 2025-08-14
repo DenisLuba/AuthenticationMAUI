@@ -21,6 +21,9 @@ public partial class FirebaseLoginService : ILoginService
         public string? GoogleRedirectUri { get; set; }
         public string? CallbackScheme { get; set; }
         public string? SecretKey { get; set; }
+        public string? FacebookAppId { get; set; }
+        public string? FacebookRedirectUri { get; set; }
+
     }
     #endregion
 
@@ -39,16 +42,18 @@ public partial class FirebaseLoginService : ILoginService
     #endregion
     
     #region Private Variables
-    private FirebaseAuthClient authClient;
-    private IUserStorageService userStorageService;
-    private string googleClientId;
-    private string googleRedirectUri;
-    private string callbackScheme;
-    private string apiKey;
+    private readonly FirebaseAuthClient authClient;
+    private readonly IUserStorageService userStorageService;
+    private readonly string? googleClientId;
+    private readonly string? googleRedirectUri;
+    private readonly string? callbackScheme;
+    private readonly string apiKey;
     private static readonly Lazy<HttpClient> httpClient = new();
     private static PhoneAuthSessionResult? sessionResult;
-    private string? secretKey;
-    private string? authDomain;
+    private readonly string? secretKey;
+    private readonly string? authDomain;
+    private readonly string? facebookAppId;
+    private readonly string? facebookRedirectUri;
     #endregion
 
     #region Constructor
@@ -73,21 +78,25 @@ public partial class FirebaseLoginService : ILoginService
             [
                 new EmailProvider(),
                 new GoogleProvider(),
+                new FacebookProvider(),
             ],
         };
 
         authClient = new FirebaseAuthClient(authConfig);
         apiKey = data.ApiKey ?? throw new ArgumentNullException(nameof(data.ApiKey), "API Key cannot be null.");
         userStorageService = data.UserStorageService ?? throw new ArgumentNullException(nameof(userStorageService), "User storage service cannot be null.");
-        googleClientId = data.GoogleClientId ?? throw new ArgumentNullException(nameof(data.GoogleClientId), "Google Client ID cannot be null.");
-        googleRedirectUri = data.GoogleRedirectUri ?? throw new ArgumentNullException(nameof(data.GoogleRedirectUri), "Google Redirect URI cannot be null.");
-
-        var _callbackScheme = data.CallbackScheme ?? throw new ArgumentNullException(nameof(data.CallbackScheme), "Callback scheme cannot be null.");
-        callbackScheme = _callbackScheme.EndsWith("://") ? _callbackScheme : $"{_callbackScheme}://"; // добавляем схему, если не указана
+        
+        googleClientId = data.GoogleClientId;
+        googleRedirectUri = data.GoogleRedirectUri;
+        var _callbackScheme = data.CallbackScheme;
+        callbackScheme = _callbackScheme is not null && _callbackScheme.EndsWith("://") ? _callbackScheme : $"{_callbackScheme}://"; // добавляем схему, если не указана
 
         secretKey = data.SecretKey;
         authDomain = data.AuthDomain?.Replace("http", "").Replace("https", "").Replace("://", "").Trim() ?? "";
         authDomain = authDomain.EndsWith("/") ? authDomain.Replace("/", "") : authDomain;
+
+        facebookAppId = data.FacebookAppId;
+        facebookRedirectUri = data.FacebookRedirectUri;
     }
     #endregion
 
@@ -143,6 +152,10 @@ public partial class FirebaseLoginService : ILoginService
         // WinUI не поддерживает WebAuthenticator.
         if (DeviceInfo.Platform == DevicePlatform.WinUI)
             return await Task.FromResult(false);
+        if (callbackScheme is null)
+            throw new InvalidOperationException("CallbackScheme must be set for Google login.");
+        if (googleRedirectUri is null)
+            throw new InvalidOperationException("Google Redirect URI must be set for Google login.");
 
         try
         {
@@ -185,7 +198,7 @@ public partial class FirebaseLoginService : ILoginService
             throw new Exception($"Google Login failed: {ex.Message}", ex);
         }
     }
-#endregion
+    #endregion
 
     #region LoginWithFacebookAsync Method
     /// <summary>
@@ -195,8 +208,47 @@ public partial class FirebaseLoginService : ILoginService
     /// <returns>В случае успеха возвращается true, иначе - false.</returns>
     public async Task<bool> LoginWithFacebookAsync(long timeoutMilliseconds)
     {
-        // TODO: Not Implemented
-        return false;
+
+        if (facebookAppId is null)
+            throw new InvalidOperationException("Facebook App ID must be set for Facebook login.");
+        if (facebookRedirectUri is null)
+            throw new InvalidOperationException("Facebook Redirect URI must be set for Facebook login.");
+
+        try
+        {
+#if WINDOWS
+        throw new NotSupportedException("Google login is not supported on Windows platform. Use LoginWithEmailAsync instead.");
+#else
+            if (callbackScheme is null)
+                throw new InvalidOperationException("CallbackScheme must be set for Facebook login.");
+
+            var appScheme = callbackScheme[..(callbackScheme.Length - "://".Length)];
+
+            var authUrl = new Uri($"https://www.facebook.com/v17.0/dialog/oauth" +
+                $"?client_id={facebookAppId}" +
+                $"&redirect_uri={facebookRedirectUri}" +
+                $"&scope=public_profile" +
+                $"&response_type=token" +
+                $"&state={appScheme}");
+            var callbackUrl = new Uri(callbackScheme);
+
+            // Открываем браузер и получаем access token
+            var result = await WebAuthenticator.AuthenticateAsync(authUrl, callbackUrl);
+            if (!result.Properties.TryGetValue("access_token", out var accessToken) || string.IsNullOrEmpty(accessToken))
+                throw new Exception("Facebook authentication failed: No access token received.");
+
+            // Превращаем токен Facebook в учетные данные Firebase credential
+            var credential = FacebookProvider.GetCredential(accessToken);
+            var authResult = await authClient.SignInWithCredentialAsync(credential);
+
+            return authResult?.User != null;
+#endif
+        }
+        catch (Exception ex)
+        {
+            Trace.WriteLine($"Facebook Login failed: {ex.Message}");
+            throw new Exception($"Facebook Login failed: {ex.Message}", ex);
+        }
     }
     #endregion
 

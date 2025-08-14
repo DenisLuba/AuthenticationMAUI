@@ -11,11 +11,17 @@
         const fragment = window.location.hash.substring(1); // в url после '#'
         const params = new URLSearchParams(fragment);
 
-        const token = params.get('id_token');
+        const idToken = params.get('id_token');
+        const accessToken = params.get('access_token');
+
         const scheme = params.get('state') || 'myapp';
 
-        if (token) {
-            window.location.href = scheme + '://auth?id_token=' + token;
+        if (idToken) {
+            // Google
+            window.location.href = scheme + '://auth?id_token=' + idToken;
+        } else if (accessToken) {
+            // Facebook
+            window.location.href = scheme + '://auth?access_token=' + accessToken;
         } else {
             document.body.innerHTML = '<h2>Token not found</h2>';
         }
