@@ -1,5 +1,3 @@
----
-
 # En
 
 # Firebase Google Auth for .NET MAUI
