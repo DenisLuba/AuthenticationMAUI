@@ -237,15 +237,15 @@ builder.Services.AddSingleton<ILoginService>(provider =>
             AuthDomain = GlobalValues.AUTH_DOMAIN, // Usually this your-project-id.firebaseapp.com (Firebase Console > Authentication > Settings > "Authorized domains")
             GoogleClientId = GlobalValues.GOOGLE_CLIENT_ID, // Your Google Client ID (Firebase Console > Authentication > Sign-in method > Google > Web SDK configuration > "Web client ID")
             GoogleRedirectUri = GlobalValues.REDIRECT_URI, // Usually it is "https://your-project-id.firebaseapp.com/__/auth/handler ", but "__/auth/handler" is changed to "redirect.html ",
-// to make it work "https://your-project-id.firebaseapp.com/redirect.html "
-                                                   // (Google Cloud Console > APIs & Services > Credentials > Auth 2.0 Client IDs > Web client (auto created by Google Service) > Authorized redirect URIs)
+                                                           // to make it work "https://your-project-id.firebaseapp.com/redirect.html "
+                                                           // (Google Cloud Console > APIs & Services > Credentials > Auth 2.0 Client IDs > Web client (auto created by Google Service) > Authorized redirect URIs)
             CallbackScheme = GlobalValues.CALLBACK_SCHEME, // A callback scheme for authentication via Google. For example, "myapp" for myapp:// (but you can also use myapp:// - this will be edited in the constructor)
             SecretKey = secretKey // Your Secret Key for reCAPTCHA from step 3.7
             SecretKey = GlobalValues.SECRET_KEY, // the secret key that Google issues when registering reCAPTCHA (used only on the server to verify the token)
-            FacebookAppId = GlobalValues.FACEBOOK_APP_ID, / Your Facebook App ID (Facebook for Developers > My Apps > [Your App] > Settings > Basic > App ID)
+            FacebookAppId = GlobalValues.FACEBOOK_APP_ID, // Your Facebook App ID (Facebook for Developers > My Apps > [Your App] > Settings > Basic > App ID)
             FacebookRedirectUri = GlobalValues.REDIRECT_URI // Usually it is "https://your-project-id.firebaseapp.com/__/auth/handler ", but "__/auth/handler" is changed to "redirect.html ",
-// to make it work "https://your-project-id.firebaseapp.com/redirect.html "
-                                                   // (Meta for Developers > Panel > Set up the "Authentication and Data request from users using Facebook Login > settings > Valid redirect URIs for OAuth" scenario)
+                                                            // to make it work "https://your-project-id.firebaseapp.com/redirect.html "
+                                                            // (Meta for Developers > Panel > Set up the "Authentication and Data request from users using Facebook Login > settings > Valid redirect URIs for OAuth" scenario)
         });
 });
 ```
