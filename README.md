@@ -848,7 +848,7 @@ public class WebAuthenticationCallbackActivity : Microsoft.Maui.Authentication.W
 
 ---
 
-# Zh-CN
+# Zh-CN （AI翻译）
 
 # Firebase Google 身份验证 for .NET MAUI
 
@@ -864,7 +864,7 @@ Firebase Hosting 示例见文件夹 `AuthenticationMAUI.FirebaseHostTemplate`。
 
 ---
 
-## 步骤 （AI翻译）
+## 步骤
 
 ### 1. 创建 Firebase 项目
 
