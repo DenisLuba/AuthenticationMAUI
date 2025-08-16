@@ -864,7 +864,7 @@ Firebase Hosting 示例见文件夹 `AuthenticationMAUI.FirebaseHostTemplate`。
 
 ---
 
-## 步骤
+## 步骤 （AI翻译）
 
 ### 1. 创建 Firebase 项目
 
