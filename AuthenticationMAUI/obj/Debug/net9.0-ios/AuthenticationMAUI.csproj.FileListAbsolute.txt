@@ -1,5 +1,6 @@
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\bin\Debug\net9.0-ios\AuthenticationMAUI.dll
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\bin\Debug\net9.0-ios\AuthenticationMAUI.pdb
+V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-ios\build-signature\signature
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-ios\actool\_PartialAppManifest.items
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-ios\actool\_BundleResourceWithLogicalName.items
 V:\MAUI Projects\AuthenticationMAUI\AuthenticationMAUI\obj\Debug\net9.0-ios\actool\_ProcessedImageAssetsPath.items
