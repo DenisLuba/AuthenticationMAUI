@@ -58,8 +58,7 @@
               "RelativeToolTip": "AuthenticationMAUI\\AuthenticationMAUI.FirebaseHostTemplate\\public\\recaptcha.html",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
-              "WhenOpened": "2025-08-02T21:38:31.479Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-02T21:38:31.479Z"
             },
             {
               "$type": "Document",
@@ -69,7 +68,7 @@
               "RelativeDocumentMoniker": "AuthenticationMAUI\\Services\\LoginServices\\FirebaseLoginService.cs",
               "ToolTip": "V:\\MAUI Projects\\AuthenticationMAUI\\AuthenticationMAUI\\Services\\LoginServices\\FirebaseLoginService.cs",
               "RelativeToolTip": "AuthenticationMAUI\\Services\\LoginServices\\FirebaseLoginService.cs",
-              "ViewState": "AgIAABcAAAAAAAAAAAAAAEAAAAC3AAAAAAAAAA==",
+              "ViewState": "AgIAAOMAAAAAAAAAAAAgwNcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-06-27T23:23:03.526Z",
               "EditorCaption": ""
