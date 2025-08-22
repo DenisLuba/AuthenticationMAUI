@@ -126,14 +126,14 @@ public final class R {
 		public static final int tag_accessibility_clickable_spans = 0x7f0801cf;
 		public static final int tag_accessibility_heading = 0x7f0801d0;
 		public static final int tag_accessibility_pane_title = 0x7f0801d1;
-		public static final int tag_screen_reader_focusable = 0x7f0801d5;
-		public static final int tag_transition_group = 0x7f0801d7;
-		public static final int tag_unhandled_key_event_manager = 0x7f0801d8;
-		public static final int tag_unhandled_key_listeners = 0x7f0801d9;
-		public static final int text = 0x7f0801db;
-		public static final int text2 = 0x7f0801dc;
-		public static final int time = 0x7f0801eb;
-		public static final int title = 0x7f0801ec;
+		public static final int tag_screen_reader_focusable = 0x7f0801d6;
+		public static final int tag_transition_group = 0x7f0801d9;
+		public static final int tag_unhandled_key_event_manager = 0x7f0801da;
+		public static final int tag_unhandled_key_listeners = 0x7f0801db;
+		public static final int text = 0x7f0801dd;
+		public static final int text2 = 0x7f0801de;
+		public static final int time = 0x7f0801ed;
+		public static final int title = 0x7f0801ee;
 	}
 	public static final class integer {
 		public static final int status_bar_notification_info_maxnum = 0x7f090044;

@@ -70,11 +70,13 @@
     <item name="tag_accessibility_clickable_spans" type="id"/>
     <item name="tag_accessibility_heading" type="id"/>
     <item name="tag_accessibility_pane_title" type="id"/>
+    <item name="tag_compat_insets_dispatch" type="id"/>
     <item name="tag_on_apply_window_listener" type="id"/>
     <item name="tag_on_receive_content_listener" type="id"/>
     <item name="tag_on_receive_content_mime_types" type="id"/>
     <item name="tag_screen_reader_focusable" type="id"/>
     <item name="tag_state_description" type="id"/>
+    <item name="tag_system_bar_state_monitor" type="id"/>
     <item name="tag_transition_group" type="id"/>
     <item name="tag_unhandled_key_event_manager" type="id"/>
     <item name="tag_unhandled_key_listeners" type="id"/>

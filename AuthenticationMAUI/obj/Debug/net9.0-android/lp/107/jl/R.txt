@@ -124,11 +124,13 @@ int id tag_accessibility_actions 0x0
 int id tag_accessibility_clickable_spans 0x0
 int id tag_accessibility_heading 0x0
 int id tag_accessibility_pane_title 0x0
+int id tag_compat_insets_dispatch 0x0
 int id tag_on_apply_window_listener 0x0
 int id tag_on_receive_content_listener 0x0
 int id tag_on_receive_content_mime_types 0x0
 int id tag_screen_reader_focusable 0x0
 int id tag_state_description 0x0
+int id tag_system_bar_state_monitor 0x0
 int id tag_transition_group 0x0
 int id tag_unhandled_key_event_manager 0x0
 int id tag_unhandled_key_listeners 0x0
