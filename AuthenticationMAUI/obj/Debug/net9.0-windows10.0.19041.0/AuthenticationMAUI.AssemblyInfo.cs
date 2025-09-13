@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AuthenticationMAUI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ef369f6c9bea22f70bc5df593b0546307d39a848")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+975aa2e483dc51baa8e6913f9eef184b53663003")]
 [assembly: System.Reflection.AssemblyProductAttribute("AuthenticationMAUI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AuthenticationMAUI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
