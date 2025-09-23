@@ -40,7 +40,7 @@ public partial class FirebaseLoginService : ILoginService
         public string IdToken { get; set; } = string.Empty;
     }
     #endregion
-    
+
     #region Private Variables
     private readonly FirebaseAuthClient authClient;
     private readonly IUserStorageService userStorageService;
@@ -85,7 +85,7 @@ public partial class FirebaseLoginService : ILoginService
         authClient = new FirebaseAuthClient(authConfig);
         apiKey = data.ApiKey ?? throw new ArgumentNullException(nameof(data.ApiKey), "API Key cannot be null.");
         userStorageService = data.UserStorageService ?? throw new ArgumentNullException(nameof(userStorageService), "User storage service cannot be null.");
-        
+
         googleClientId = data.GoogleClientId;
         googleRedirectUri = data.GoogleRedirectUri;
         var _callbackScheme = data.CallbackScheme;
@@ -396,7 +396,8 @@ public partial class FirebaseLoginService : ILoginService
     {
         try
         {
-            authClient.SignOut();
+            if (authClient is not null)
+                authClient.SignOut();
         }
         catch (Exception ex)
         {
