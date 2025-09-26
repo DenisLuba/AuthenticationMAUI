@@ -1,4 +1,5 @@
-﻿using Firebase.Auth;
+﻿using AuthenticationMAUI.Models;
+using Firebase.Auth;
 using Firebase.Auth.Providers;
 using System.Diagnostics;
 using System.Net.Http.Json;
@@ -107,10 +108,10 @@ public partial class FirebaseLoginService : ILoginService
     /// <param name="loginOrEmail">Логин или адрес электронной почты.</param>
     /// <param name="password">Пароль аккаунта (не от почты).</param>
     /// <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
-    /// <returns>В случае успеха возвращается true, инача - false.</returns>
+    /// <returns><see cref="AuthResult"/></returns>
     /// <exception cref="FirebaseAuthException">Обработка ошибок аутентификации. Например, неверный пароль или адрес электронной почты.</exception>
     /// <exception cref="Exception">Обработка других ошибок. Например, в хранилище типа IUserStorageService не найден логин.</exception>
-    public async Task<bool> LoginWithEmailAsync(string loginOrEmail, string password, long timeoutMilliseconds)
+    public async Task<AuthResult> LoginWithEmailAsync(string loginOrEmail, string password, long timeoutMilliseconds)
     {
         try
         {
@@ -125,7 +126,11 @@ public partial class FirebaseLoginService : ILoginService
             return await CallWithTimeout(async () =>
                 {
                     var userCredential = await authClient.SignInWithEmailAndPasswordAsync(email, password);
-                    return !string.IsNullOrEmpty(userCredential?.User?.Info?.Email);
+
+                    if (string.IsNullOrEmpty(userCredential?.User?.Uid))
+                        return AuthResult.Failed("Authentication failed.");
+
+                    return await GetAuthResult(userCredential, "email");
                 },
                 timeoutMilliseconds);
         }
@@ -145,13 +150,13 @@ public partial class FirebaseLoginService : ILoginService
     /// Вход с помощью Google аккаунта.
     /// </summary>
     /// <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
-    /// <returns>В случае успеха возвращается true, иначе - false.</returns>
+    /// <returns><see cref="AuthResult"/></returns>
     /// <exception cref="Exception">Исключение в случае неудачи авторизации через Google.</exception>
-    public async Task<bool> LoginWithGoogleAsync(long timeoutMilliseconds)
+    public async Task<AuthResult> LoginWithGoogleAsync(long timeoutMilliseconds)
     {
         // WinUI не поддерживает WebAuthenticator.
         if (DeviceInfo.Platform == DevicePlatform.WinUI)
-            return await Task.FromResult(false);
+            throw new InvalidOperationException("Google login not supported on Windows.");
         if (callbackScheme is null)
             throw new InvalidOperationException("CallbackScheme must be set for Google login.");
         if (googleRedirectUri is null)
@@ -175,8 +180,6 @@ public partial class FirebaseLoginService : ILoginService
                   $"&nonce={Guid.NewGuid()}" +
                   $"&state={appScheme}");
 
-                Trace.WriteLine(startUri);
-
                 var endUri = new Uri($"{callbackScheme}");
 
                 var authResult = await WebAuthenticator.AuthenticateAsync(startUri, endUri);
@@ -186,9 +189,12 @@ public partial class FirebaseLoginService : ILoginService
 
                 var credential = GoogleProvider.GetCredential(idToken, OAuthCredentialTokenType.IdToken);
 
-                var result = await authClient.SignInWithCredentialAsync(credential);
+                var userCredential = await authClient.SignInWithCredentialAsync(credential);
 
-                return !string.IsNullOrEmpty(result?.User?.Info?.Email);
+                if (string.IsNullOrEmpty(userCredential?.User?.Uid))
+                    return AuthResult.Failed("Google authentication failed.");
+
+                return await GetAuthResult(userCredential, "google");
             },
             timeoutMilliseconds);
 #endif
@@ -205,8 +211,8 @@ public partial class FirebaseLoginService : ILoginService
     /// Вход с помощью аккаунта Facebook.
     /// </summary>
     /// <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
-    /// <returns>В случае успеха возвращается true, иначе - false.</returns>
-    public async Task<bool> LoginWithFacebookAsync(long timeoutMilliseconds)
+    /// <returns><see cref="AuthResult"/>></returns>
+    public async Task<AuthResult> LoginWithFacebookAsync(long timeoutMilliseconds)
     {
 
         if (facebookAppId is null)
@@ -222,26 +228,34 @@ public partial class FirebaseLoginService : ILoginService
             if (callbackScheme is null)
                 throw new InvalidOperationException("CallbackScheme must be set for Facebook login.");
 
-            var appScheme = callbackScheme[..(callbackScheme.Length - "://".Length)];
+            return await CallWithTimeout(async () =>
+            {
+                var appScheme = callbackScheme[..(callbackScheme.Length - "://".Length)];
 
-            var authUrl = new Uri($"https://www.facebook.com/v17.0/dialog/oauth" +
-                $"?client_id={facebookAppId}" +
-                $"&redirect_uri={facebookRedirectUri}" +
-                $"&scope=public_profile" +
-                $"&response_type=token" +
-                $"&state={appScheme}");
-            var callbackUrl = new Uri(callbackScheme);
+                var authUrl = new Uri($"https://www.facebook.com/v17.0/dialog/oauth" +
+                    $"?client_id={facebookAppId}" +
+                    $"&redirect_uri={facebookRedirectUri}" +
+                    $"&scope=public_profile" +
+                    $"&response_type=token" +
+                    $"&state={appScheme}");
+                var callbackUrl = new Uri(callbackScheme);
 
-            // Открываем браузер и получаем access token
-            var result = await WebAuthenticator.AuthenticateAsync(authUrl, callbackUrl);
-            if (!result.Properties.TryGetValue("access_token", out var accessToken) || string.IsNullOrEmpty(accessToken))
-                throw new Exception("Facebook authentication failed: No access token received.");
+                // Открываем браузер и получаем access token
+                var result = await WebAuthenticator.AuthenticateAsync(authUrl, callbackUrl);
+                if (!result.Properties.TryGetValue("access_token", out var accessToken) || string.IsNullOrEmpty(accessToken))
+                    throw new Exception("Facebook authentication failed: No access token received.");
 
-            // Превращаем токен Facebook в учетные данные Firebase credential
-            var credential = FacebookProvider.GetCredential(accessToken);
-            var authResult = await authClient.SignInWithCredentialAsync(credential);
+                // Превращаем токен Facebook в учетные данные Firebase credential
+                var credential = FacebookProvider.GetCredential(accessToken);
+                var userCredential = await authClient.SignInWithCredentialAsync(credential);
 
-            return authResult?.User != null;
+                if (string.IsNullOrEmpty(userCredential?.User?.Uid))
+                    return AuthResult.Failed("Facebook authentication failed.");
+
+                return await GetAuthResult(userCredential, "facebook");
+            },
+            timeoutMilliseconds);
+
 #endif
         }
         catch (Exception ex)
@@ -356,9 +370,9 @@ public partial class FirebaseLoginService : ILoginService
     /// </summary>
     /// <param name="smsCode">Код, полученный пользователем в СМС.</param>
     /// <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
-    /// <returns>true, если аутентификация прошла успешно, false - в противном случае.</returns>
+    /// <returns><see cref="AuthResult"/></returns>
     /// <exception cref="Exception">Выбрасывается, если запрос завершился неудачей или ответ не содержит необходимой информации о сессии.</exception>
-    public async Task<bool> LoginWithVerificationCodeAsync(string smsCode, long timeoutMilliseconds)
+    public async Task<AuthResult> LoginWithVerificationCodeAsync(string smsCode, long timeoutMilliseconds)
     {
         var request = new
         {
@@ -381,8 +395,22 @@ public partial class FirebaseLoginService : ILoginService
             if (!response.IsSuccessStatusCode)
                 throw new Exception($"Phone auth login failed: {json}");
 
-            var result = JsonSerializer.Deserialize<PhoneLoginResponse>(json);
-            return !string.IsNullOrEmpty(result?.IdToken);
+            var phoneLoginResponse = JsonSerializer.Deserialize<PhoneLoginResponse>(json);
+
+            if (string.IsNullOrEmpty(phoneLoginResponse?.IdToken))
+                return AuthResult.Failed("Phone authentication failed.");
+
+            // Получаем информацию о пользователе используя idToken
+            var userData = await GetUserInfoFromIdTokenAsync(phoneLoginResponse.IdToken);
+            var tokens = new AuthTokens
+            {
+                IdToken = phoneLoginResponse.IdToken,
+                RefreshToken = await GetRefreshTokenFromIdTokenAsync(phoneLoginResponse.IdToken),
+                ExpiresIn = "3600", // Обычно токен действителен 1 час
+                TokenExpiry = DateTime.UtcNow.AddHours(1)
+            };
+
+            return AuthResult.Successful(userData, tokens);
         },
         timeoutMilliseconds);
     }
@@ -396,8 +424,16 @@ public partial class FirebaseLoginService : ILoginService
     {
         try
         {
-            if (authClient is not null)
+            if (authClient is not null && authClient.User is not null)
                 authClient.SignOut();
+            else
+            {
+                throw new InvalidOperationException("No user is currently signed in.");
+            }
+        }
+        catch (InvalidOperationException ex)
+        {
+            throw new InvalidOperationException($"Logout failed: {ex.Message}", ex);
         }
         catch (Exception ex)
         {
@@ -414,10 +450,10 @@ public partial class FirebaseLoginService : ILoginService
     /// <param name="email">Адрес электронной почты.</param>
     /// <param name="password">Пароль аккаунта (не от почты).</param>
     /// <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
-    /// <returns>true случае успеха; иначе - false</returns>
+    /// <returns><see cref="AuthResult"/></returns>
     /// <exception cref="FirebaseAuthException">Обработка ошибок аутентификации. Например, неверный пароль или адрес электронной почты.</exception>
     /// <exception cref="Exception">Обработка других ошибок.Например, невалидная почта или невалидный пароль.</exception>
-    public async Task<bool> RegisterWithEmailAsync(string login, string email, string password, long timeoutMilliseconds)
+    public async Task<AuthResult> RegisterWithEmailAsync(string login, string email, string password, long timeoutMilliseconds)
     {
         try
         {
@@ -432,8 +468,12 @@ public partial class FirebaseLoginService : ILoginService
 
             return await CallWithTimeout(async () =>
                 {
-                    var registrationResult = await authClient.CreateUserWithEmailAndPasswordAsync(email, password, login);
-                    return !string.IsNullOrEmpty(registrationResult?.User?.Info?.Email);
+                    var userCredential = await authClient.CreateUserWithEmailAndPasswordAsync(email, password, login);
+                    
+                    if (string.IsNullOrEmpty(userCredential?.User?.Uid))
+                        return AuthResult.Failed("Registration failed.");
+
+                    return await GetAuthResult(userCredential, "email");
                 },
                 timeoutMilliseconds);
         }
@@ -572,12 +612,149 @@ public partial class FirebaseLoginService : ILoginService
         var task = asyncOperation();
         var cancelTask = Task.Delay(TimeSpan.FromMilliseconds(timeoutMilliseconds));
 
-        var completed = await Task.WhenAny(task, cancelTask);
+        var completed = await Task.WhenAny(task, cancelTask); // что закончится быстрее, задача или таймаут
 
         if (completed == cancelTask)
             throw new TimeoutException("The operation was cancelled."); // отмена операции
 
         return await task; // Нормальное завершение задачи 
+    }
+    #endregion
+
+    #region GetAuthTokenAsync Method
+    /// <summary>
+    /// Возвращает refresh и id токены пользователя Firebase
+    /// </summary>
+    /// <param name="credential"></param>
+    /// <returns><see cref="AuthTokens"/></returns>
+    private async Task<AuthTokens> GetAuthTokensAsync(UserCredential credential)
+    {
+        var idToken = await credential.User.GetIdTokenAsync();
+        var refreshToken = credential.User.Credential.RefreshToken;
+
+        return new()
+        {
+            IdToken = idToken,
+            RefreshToken = refreshToken,
+            ExpiresIn = "3600", // в Firebase Id токен выдается на 1 час - 3600 секунд
+            TokenExpiry = DateTime.UtcNow.AddHours(1) // ID токен истечет через час от текущего момента
+        };
+    }
+    #endregion
+
+    #region CreateUserAuthData Method
+    /// <summary>
+    /// Возвращает данные пользователя, прошедшего аутентификацию.
+    /// </summary>
+    /// <param name="user"><see cref="User"/> user, который прошел аутентификацию.</param>
+    /// <param name="provider">Провайдер, с помощью которого, пользователь прошел аутентификацию.</param>
+    /// <returns></returns>
+    private UserAuthData CreateUserAuthData(User user, string provider) =>
+        new(
+            IsEmailVerified: user.Info.IsEmailVerified,
+            DisplayName: user.Info.DisplayName,
+            PhotoUrl: user.Info.PhotoUrl,
+            PhoneNumber: null,
+            UserId: user.Uid,
+            Email: user.Info.Email ?? string.Empty,
+            Provider: provider);
+    #endregion
+
+    #region GetAuthResult Method
+    /// <summary>
+    /// Возвращает асинхронно результат с данными аутентифицированного пользователя.
+    /// </summary>
+    /// <param name="userCredential"></param>
+    /// <param name="provider"></param>
+    /// <returns></returns>
+    private async Task<AuthResult> GetAuthResult(UserCredential userCredential, string provider)
+    {
+        var authData = CreateUserAuthData(userCredential.User, provider);
+        var tokens = await GetAuthTokensAsync(userCredential);
+
+        return AuthResult.Successful(authData, tokens);
+    }
+    #endregion
+
+    #region GetUserInfoFromIdTokenAsync Method
+    /// <summary>
+    /// Возвращает информацию о пользователе по ID токену.
+    /// </summary>
+    /// <param name="idToken">ID токен</param>
+    /// <returns><see cref="UserAuthData"/></returns>
+    private async Task<UserAuthData?> GetUserInfoFromIdTokenAsync(string idToken)
+    {
+        // Используем Firebase REST API для получения информации о пользователе
+        var request = new { idToken };
+
+        using var requestMessage = new HttpRequestMessage(
+            method: HttpMethod.Post,
+            requestUri: $"https://identitytoolkit.googleapis.com/v1/accounts:lookup?key={apiKey}")
+        {
+            Content = JsonContent.Create(request)
+        };
+
+        using var response = await httpClient.Value.SendAsync(requestMessage);
+        var json = await response.Content.ReadAsStringAsync();
+
+        // Парсим ответ и возвращаем информацию о пользователе
+        using var doc = JsonDocument.Parse(json);
+        var root = doc.RootElement;
+
+        if (root.TryGetProperty("users", out var users) && users.GetArrayLength() > 0)
+        {
+            var user = users[0];
+
+            string? uid = user.TryGetProperty("localId", out var localIdProperty) ? localIdProperty.GetString() : null;
+            string? email = user.TryGetProperty("email", out var emailProperty) ? emailProperty.GetString() : null;
+            string? phoneNumber = user.TryGetProperty("phoneNumber", out var phoneProperty) ? phoneProperty.GetString() : null;
+            bool isEmailVerified = user.TryGetProperty("emailVerified", out var emailVerifiedProperty) && emailVerifiedProperty.GetBoolean();
+
+            return new(
+                IsEmailVerified: isEmailVerified,
+                DisplayName: null,
+                PhotoUrl: null,
+                PhoneNumber: phoneNumber,
+                UserId: uid ?? string.Empty,
+                Email: email ?? string.Empty,
+                Provider: "phone");
+        }
+
+        return null;
+    } 
+    #endregion
+
+    #region GetRefreshTokenFromIdTokenAsync Method
+    /// <summary>
+    /// Возвращаем refresh 
+    /// </summary>
+    /// <param name="idToken">ID токен Firebase</param>
+    /// <returns>refresh токен</returns>
+    private async Task<string> GetRefreshTokenFromIdTokenAsync(string idToken)
+    {
+        // Обмениваем idToken на refreshToken
+        var request = new
+        {
+            grant_type = "authorization_code",
+            code = idToken
+        };
+
+        using var requestMessage = new HttpRequestMessage(
+            method: HttpMethod.Post,
+            requestUri: $"https://securetoken.googleapis.com/v1/token?key={apiKey}")
+        {
+            Content = JsonContent.Create(request)
+        };
+
+        using var response = await httpClient.Value.SendAsync(requestMessage);
+        var json = await response.Content.ReadAsStringAsync();
+
+        // Парсим JSON и извлекаем refresh_token
+        using var doc = JsonDocument.Parse(json);
+        if (doc.RootElement.TryGetProperty("refresh_token", out var refreshTokenElement))
+            return refreshTokenElement.GetString() ?? string.Empty;
+
+        return string.Empty;
     }
     #endregion
 }

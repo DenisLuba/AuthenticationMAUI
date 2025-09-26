@@ -1,4 +1,6 @@
-﻿namespace AuthenticationMaui.Services;
+﻿using AuthenticationMAUI.Models;
+
+namespace AuthenticationMaui.Services;
 
 public interface ILoginService
 {
@@ -9,8 +11,8 @@ public interface ILoginService
     /// <param name="loginOrEmail">Логин или адрес электронной почты.</param>
     /// <param name="password">Пароль аккаунта (не от почты).</param>
     /// <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
-    /// <returns>В случае успеха возвращается true, иначе - false.</returns>
-    Task<bool> LoginWithEmailAsync(string loginOrEmail, string password, long timeoutMilliseconds);
+    /// <returns><see cref="AuthResult"/></returns>
+    Task<AuthResult> LoginWithEmailAsync(string loginOrEmail, string password, long timeoutMilliseconds);
     #endregion
 
     #region LoginWithGoogleAsync Method
@@ -18,8 +20,8 @@ public interface ILoginService
     /// Вход с помощью аккаунта Google.
     /// </summary>
     /// <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
-    /// <returns>В случае успеха возвращается true, иначе - false.</returns>
-    Task<bool> LoginWithGoogleAsync(long timeoutMilliseconds);
+    /// <returns><see cref="AuthResult"/></returns>
+    Task<AuthResult> LoginWithGoogleAsync(long timeoutMilliseconds);
     #endregion
 
     #region LoginWithFacebookAsync Method
@@ -27,8 +29,8 @@ public interface ILoginService
     /// Вход с помощью аккаунта Facebook.
     /// </summary>
     /// <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
-    /// <returns>В случае успеха возвращается true, иначе - false.</returns>
-    Task<bool> LoginWithFacebookAsync(long timeoutMilliseconds);
+    /// <returns><see cref="AuthResult"/></returns>
+    Task<AuthResult> LoginWithFacebookAsync(long timeoutMilliseconds);
     #endregion
 
     #region VerifyRecaptchaTokenAsync Method
@@ -63,9 +65,9 @@ public interface ILoginService
     /// </summary>
     /// <param name="code">Код, полученный пользователем в СМС.</param>
     /// <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
-    /// <returns>true, если аутентификация прошла успешно, false - в противном случае.</returns>
+    /// <returns><see cref="AuthResult"/></returns>
     /// <exception cref="Exception">Выбрасывается, если запрос завершился неудачей или ответ не содержит необходимой информации о сессии.</exception>
-    Task<bool> LoginWithVerificationCodeAsync(string code, long timeoutMilliseconds);
+    Task<AuthResult> LoginWithVerificationCodeAsync(string code, long timeoutMilliseconds);
     #endregion
 
     #region RegisterWithEmailAsync Method
@@ -76,8 +78,8 @@ public interface ILoginService
     /// <param name="email">Адрес электронной почты.</param>
     /// <param name="password">Пароль аккаунта (не от почты).</param>
     /// <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
-    /// <returns>true случае успеха; иначе - false</returns>
-    Task<bool> RegisterWithEmailAsync(string login, string email, string password, long timeoutMilliseconds);
+    /// <returns><see cref="AuthResult"/></returns>
+    Task<AuthResult> RegisterWithEmailAsync(string login, string email, string password, long timeoutMilliseconds);
     #endregion
 
     #region SendPasswordResetEmailAsync Method
