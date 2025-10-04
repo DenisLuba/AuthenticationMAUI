@@ -9,7 +9,7 @@ public class AuthResult
     public UserAuthData? UserData { get; set; }
     public AuthTokens? Tokens { get; set; }
 
-    public static AuthResult Successful(UserAuthData? userData, AuthTokens tokens) =>
+    public static AuthResult Successful(UserAuthData? userData, AuthTokens? tokens) =>
         new() { Success = true, UserData = userData, Tokens = tokens };
 
     public static AuthResult Failed(string errorMessage) => 
