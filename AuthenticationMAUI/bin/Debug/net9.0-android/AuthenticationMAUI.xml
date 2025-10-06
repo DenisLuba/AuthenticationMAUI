@@ -11,21 +11,21 @@
             <param name="loginOrEmail">Логин или адрес электронной почты.</param>
             <param name="password">Пароль аккаунта (не от почты).</param>
             <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
-            <returns>В случае успеха возвращается true, иначе - false.</returns>
+            <returns><see cref="T:AuthenticationMAUI.Models.AuthResult"/></returns>
         </member>
         <member name="M:AuthenticationMaui.Services.ILoginService.LoginWithGoogleAsync(System.Int64)">
             <summary>
             Вход с помощью аккаунта Google.
             </summary>
             <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
-            <returns>В случае успеха возвращается true, иначе - false.</returns>
+            <returns><see cref="T:AuthenticationMAUI.Models.AuthResult"/></returns>
         </member>
         <member name="M:AuthenticationMaui.Services.ILoginService.LoginWithFacebookAsync(System.Int64)">
             <summary>
             Вход с помощью аккаунта Facebook.
             </summary>
             <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
-            <returns>В случае успеха возвращается true, иначе - false.</returns>
+            <returns><see cref="T:AuthenticationMAUI.Models.AuthResult"/></returns>
         </member>
         <member name="M:AuthenticationMaui.Services.ILoginService.VerifyRecaptchaTokenAsync(System.String,System.Int64)">
             <summary>
@@ -55,7 +55,7 @@
             </summary>
             <param name="code">Код, полученный пользователем в СМС.</param>
             <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
-            <returns>true, если аутентификация прошла успешно, false - в противном случае.</returns>
+            <returns><see cref="T:AuthenticationMAUI.Models.AuthResult"/></returns>
             <exception cref="T:System.Exception">Выбрасывается, если запрос завершился неудачей или ответ не содержит необходимой информации о сессии.</exception>
         </member>
         <member name="M:AuthenticationMaui.Services.ILoginService.RegisterWithEmailAsync(System.String,System.String,System.String,System.Int64)">
@@ -66,7 +66,7 @@
             <param name="email">Адрес электронной почты.</param>
             <param name="password">Пароль аккаунта (не от почты).</param>
             <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
-            <returns>true случае успеха; иначе - false</returns>
+            <returns><see cref="T:AuthenticationMAUI.Models.AuthResult"/></returns>
         </member>
         <member name="M:AuthenticationMaui.Services.ILoginService.SendPasswordResetEmailAsync(System.String,System.Int64)">
             <summary>
@@ -121,7 +121,7 @@
             <param name="loginOrEmail">Логин или адрес электронной почты.</param>
             <param name="password">Пароль аккаунта (не от почты).</param>
             <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
-            <returns>В случае успеха возвращается true, инача - false.</returns>
+            <returns><see cref="T:AuthenticationMAUI.Models.AuthResult"/></returns>
             <exception cref="T:Firebase.Auth.FirebaseAuthException">Обработка ошибок аутентификации. Например, неверный пароль или адрес электронной почты.</exception>
             <exception cref="T:System.Exception">Обработка других ошибок. Например, в хранилище типа IUserStorageService не найден логин.</exception>
         </member>
@@ -130,7 +130,7 @@
             Вход с помощью Google аккаунта.
             </summary>
             <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
-            <returns>В случае успеха возвращается true, иначе - false.</returns>
+            <returns><see cref="T:AuthenticationMAUI.Models.AuthResult"/></returns>
             <exception cref="T:System.Exception">Исключение в случае неудачи авторизации через Google.</exception>
         </member>
         <member name="M:AuthenticationMaui.Services.FirebaseLoginService.LoginWithFacebookAsync(System.Int64)">
@@ -138,7 +138,7 @@
             Вход с помощью аккаунта Facebook.
             </summary>
             <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
-            <returns>В случае успеха возвращается true, иначе - false.</returns>
+            <returns><see cref="T:AuthenticationMAUI.Models.AuthResult"/>></returns>
         </member>
         <member name="M:AuthenticationMaui.Services.FirebaseLoginService.VerifyRecaptchaTokenAsync(System.String,System.Int64)">
             <summary>
@@ -171,7 +171,7 @@
             </summary>
             <param name="smsCode">Код, полученный пользователем в СМС.</param>
             <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
-            <returns>true, если аутентификация прошла успешно, false - в противном случае.</returns>
+            <returns><see cref="T:AuthenticationMAUI.Models.AuthResult"/></returns>
             <exception cref="T:System.Exception">Выбрасывается, если запрос завершился неудачей или ответ не содержит необходимой информации о сессии.</exception>
         </member>
         <member name="M:AuthenticationMaui.Services.FirebaseLoginService.Logout">
@@ -187,7 +187,7 @@
             <param name="email">Адрес электронной почты.</param>
             <param name="password">Пароль аккаунта (не от почты).</param>
             <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции входа.</param>
-            <returns>true случае успеха; иначе - false</returns>
+            <returns><see cref="T:AuthenticationMAUI.Models.AuthResult"/></returns>
             <exception cref="T:Firebase.Auth.FirebaseAuthException">Обработка ошибок аутентификации. Например, неверный пароль или адрес электронной почты.</exception>
             <exception cref="T:System.Exception">Обработка других ошибок.Например, невалидная почта или невалидный пароль.</exception>
         </member>
@@ -276,6 +276,43 @@
             <returns><see cref="T:System.Threading.Tasks.Task"/> с результатом операции типа <see cref="T:System.Object"/></returns>
             <exception cref="T:System.TimeoutException">Если операция не успела закончится в течение установленного времени.</exception>
         </member>
+        <member name="M:AuthenticationMaui.Services.FirebaseLoginService.GetAuthTokensAsync(Firebase.Auth.UserCredential)">
+            <summary>
+            Возвращает refresh и id токены пользователя Firebase
+            </summary>
+            <param name="credential"></param>
+            <returns><see cref="T:AuthenticationMAUI.Models.AuthTokens"/></returns>
+        </member>
+        <member name="M:AuthenticationMaui.Services.FirebaseLoginService.CreateUserAuthData(Firebase.Auth.User,System.String)">
+            <summary>
+            Возвращает данные пользователя, прошедшего аутентификацию.
+            </summary>
+            <param name="user"><see cref="T:Firebase.Auth.User"/> user, который прошел аутентификацию.</param>
+            <param name="provider">Провайдер, с помощью которого, пользователь прошел аутентификацию.</param>
+            <returns></returns>
+        </member>
+        <member name="M:AuthenticationMaui.Services.FirebaseLoginService.GetAuthResult(Firebase.Auth.UserCredential,System.String)">
+            <summary>
+            Возвращает асинхронно результат с данными аутентифицированного пользователя.
+            </summary>
+            <param name="userCredential"></param>
+            <param name="provider"></param>
+            <returns></returns>
+        </member>
+        <member name="M:AuthenticationMaui.Services.FirebaseLoginService.GetUserInfoFromIdTokenAsync(System.String)">
+            <summary>
+            Возвращает информацию о пользователе по ID токену.
+            </summary>
+            <param name="idToken">ID токен</param>
+            <returns><see cref="T:AuthenticationMAUI.Models.UserAuthData"/></returns>
+        </member>
+        <member name="M:AuthenticationMaui.Services.FirebaseLoginService.GetRefreshTokenFromIdTokenAsync(System.String)">
+            <summary>
+            Возвращаем refresh 
+            </summary>
+            <param name="idToken">ID токен Firebase</param>
+            <returns>refresh токен</returns>
+        </member>
         <member name="M:AuthenticationMaui.Services.RecaptchaService.GetRecaptchaTokenAsync">
             <summary>
             Показывает страницу с reCAPTCHA и возвращает токен после прохождения теста.
@@ -314,6 +351,26 @@
             Удаляет пользователя из SecureStorage по логину.
             </summary>
             <param name="login">Логин пользователя.</param>
+        </member>
+        <member name="P:AuthenticationMAUI.Models.AuthTokens.IdToken">
+            <summary>
+            Токен ID - недолговечный токен
+            </summary>
+        </member>
+        <member name="P:AuthenticationMAUI.Models.AuthTokens.RefreshToken">
+            <summary>
+            Refresh токен - долговечный токен
+            </summary>
+        </member>
+        <member name="P:AuthenticationMAUI.Models.AuthTokens.ExpiresIn">
+            <summary>
+            Срок жизни токена ID
+            </summary>
+        </member>
+        <member name="P:AuthenticationMAUI.Models.AuthTokens.TokenExpiry">
+            <summary>
+            Время, когда истечет срок жизни токена ID
+            </summary>
         </member>
         <member name="T:AuthenticationMAUI.Resource">
             <summary>
