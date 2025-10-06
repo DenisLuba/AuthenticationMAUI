@@ -74,12 +74,20 @@
             </summary>
             <param name="loginOrEmail">Логин или адрес электронной почты.</param>
             <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции сброса пароля.</param>
-            <returns>true в случае успеха; иначе - false.</returns>
         </member>
         <member name="M:AuthenticationMaui.Services.ILoginService.Logout">
             <summary>
             Выход из аккаунта.
             </summary>
+        </member>
+        <member name="M:AuthenticationMaui.Services.ILoginService.LoginWithRefreshTokenAsync(System.String,System.Int64)">
+            <summary>
+            Вход с помощью refresh токена.
+            </summary>
+            <param name="refreshToken">Refresh токен</param>
+            <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции сброса пароля.</param>
+            <returns><see cref="T:AuthenticationMAUI.Models.AuthResult"/></returns>
+            <exception cref="T:System.Exception">Выбрасывается, если запрос завершился неудачей или ответ не содержит необходимой информации о сессии.</exception>
         </member>
         <member name="M:AuthenticationMaui.Services.IUserStorageService.AddUserAsync(System.String,System.String)">
             <summary>
@@ -197,8 +205,17 @@
             </summary>
             <param name="loginOrEmail">Логин или адрес электронной почты.</param>
             <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции сброса пароля.</param>
-            <returns>true в случае успеха; иначе - false.</returns>
             <exception cref="T:System.Exception">Ошибка сброса пароля. Например, неверный email или логин.</exception>
+        </member>
+        <member name="M:AuthenticationMaui.Services.FirebaseLoginService.LoginWithRefreshTokenAsync(System.String,System.Int64)">
+            <summary>
+            Вход с помощью refresh токена.
+            </summary>
+            <param name="refreshToken">Refresh токен</param>
+            <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции сброса пароля.</param>
+            <returns><see cref="T:AuthenticationMAUI.Models.AuthResult"/></returns>
+            <exception cref="T:Firebase.Auth.FirebaseAuthException">Обработка ошибок аутентификации. Например, неверный refresh token.</exception>
+            <exception cref="T:System.Exception">Обработка других ошибок.</exception>
         </member>
         <member name="M:AuthenticationMaui.Services.FirebaseLoginService.IsValidEmail(System.String)">
             <summary>

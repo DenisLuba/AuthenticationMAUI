@@ -88,7 +88,6 @@ public interface ILoginService
     /// </summary>
     /// <param name="loginOrEmail">Логин или адрес электронной почты.</param>
     /// <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции сброса пароля.</param>
-    /// <returns>true в случае успеха; иначе - false.</returns>
     Task SendPasswordResetEmailAsync(string loginOrEmail, long timeoutMilliseconds);
     #endregion
 
@@ -96,6 +95,17 @@ public interface ILoginService
     /// <summary>
     /// Выход из аккаунта.
     /// </summary>
-    void Logout(); 
+    void Logout();
+    #endregion
+
+    #region LoginWithRefreshTokenAsync Method
+    /// <summary>
+    /// Вход с помощью refresh токена.
+    /// </summary>
+    /// <param name="refreshToken">Refresh токен</param>
+    /// <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции сброса пароля.</param>
+    /// <returns><see cref="AuthResult"/></returns>
+    /// <exception cref="Exception">Выбрасывается, если запрос завершился неудачей или ответ не содержит необходимой информации о сессии.</exception>
+    Task<AuthResult> LoginWithRefreshTokenAsync(string refreshToken, long timeoutMilliseconds);
     #endregion
 }

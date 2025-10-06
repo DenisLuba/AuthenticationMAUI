@@ -494,7 +494,6 @@ public partial class FirebaseLoginService : ILoginService
     /// </summary>
     /// <param name="loginOrEmail">Логин или адрес электронной почты.</param>
     /// <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции сброса пароля.</param>
-    /// <returns>true в случае успеха; иначе - false.</returns>
     /// <exception cref="Exception">Ошибка сброса пароля. Например, неверный email или логин.</exception>
     public async Task SendPasswordResetEmailAsync(string loginOrEmail, long timeoutMilliseconds)
     {
@@ -521,6 +520,80 @@ public partial class FirebaseLoginService : ILoginService
         }
     }
     #endregion
+
+    #region LoginWithRefreshTokenAsync Method
+    /// <summary>
+    /// Вход с помощью refresh токена.
+    /// </summary>
+    /// <param name="refreshToken">Refresh токен</param>
+    /// <param name="timeoutMilliseconds">Максимальное время ожидания в миллисекундах для выполнения операции сброса пароля.</param>
+    /// <returns><see cref="AuthResult"/></returns>
+    /// <exception cref="FirebaseAuthException">Обработка ошибок аутентификации. Например, неверный refresh token.</exception>
+    /// <exception cref="Exception">Обработка других ошибок.</exception>
+    public async Task<AuthResult> LoginWithRefreshTokenAsync(string refreshToken, long timeoutMilliseconds)
+    {
+        try
+        {
+            return await CallWithTimeout(async () =>
+            {
+
+                var request = new
+                {
+                    grant_type = "refresh_token",
+                    refresh_token = refreshToken
+                };
+
+                using var requestMessage = new HttpRequestMessage(
+                    method: HttpMethod.Post,
+                    requestUri: $"https://securetoken.googleapis.com/v1/token?key={apiKey}")
+                {
+                    Content = JsonContent.Create(request)
+                };
+
+                using var response = await httpClient.Value.SendAsync(requestMessage).ConfigureAwait(false);
+                var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+                if (!response.IsSuccessStatusCode)
+                    throw new FirebaseAuthException($"Refresh token login failed: {json}", AuthErrorReason.InvalidAccessToken);
+
+                Trace.WriteLine($"Refresh token login response: {json}");
+
+                using var doc = JsonDocument.Parse(json);
+                var root = doc.RootElement;
+
+                var idToken = root.GetProperty("id_token").GetString(); // новый ID токен
+                var newRefreshToken = root.GetProperty("refresh_token").GetString(); // новый refresh токен
+                var expiresIn = root.GetProperty("expires_in").GetString(); // время жизни токена в секундах
+
+                var userData = await GetUserInfoFromIdTokenAsync(idToken
+                    ?? throw new FirebaseAuthException(
+                        "id_token is null in the LoginWithRefreshTokenAsync Method",
+                        AuthErrorReason.InvalidIDToken));
+
+                var tokens = new AuthTokens
+                {
+                    IdToken = idToken,
+                    RefreshToken = newRefreshToken ?? refreshToken,
+                    ExpiresIn = expiresIn ?? "3600",
+                    TokenExpiry = DateTime.UtcNow.AddSeconds(int.Parse(expiresIn ?? "3600"))
+                };
+
+                return AuthResult.Successful(userData, tokens);
+            },
+            timeoutMilliseconds);
+        }
+        catch (FirebaseAuthException ex)
+        {
+            throw new FirebaseAuthException($"Login with refresh token failed: {ex.Message}", ex.Reason);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Login with refresh token error: {ex.Message}", ex);
+        }
+    } 
+    #endregion
+
+    // Вспомогательные методы
 
     #region IsValidEmail Method
     /// <summary>
